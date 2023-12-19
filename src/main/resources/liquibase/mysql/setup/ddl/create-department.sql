@@ -3,4 +3,4 @@ create table tbl_department(
 	name varchar(100) not null,
 	shortname varchar(50) not null,
 	primary key (id)
-) 
+)
