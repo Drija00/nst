@@ -8,10 +8,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import nst.springboot.restexample01.controller.domain.Department;
+import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.repository.DepartmentRepository;
 import nst.springboot.restexample01.controller.service.DepartmentService;
 import nst.springboot.restexample01.converter.impl.DepartmentConverter;
+import nst.springboot.restexample01.converter.impl.MemberConverter;
 import nst.springboot.restexample01.dto.DepartmentDto;
+import nst.springboot.restexample01.dto.MemberDTO;
 import nst.springboot.restexample01.exception.DepartmentAlreadyExistException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import org.springframework.stereotype.Service;
 public class DepartmentServiceImpl implements DepartmentService {
 
     private DepartmentConverter departmentConverter;
+    private MemberConverter memberConverter;
     private DepartmentRepository departmentRepository;
 
 
@@ -91,4 +95,19 @@ public class DepartmentServiceImpl implements DepartmentService {
                 .stream().map(entity -> departmentConverter.toDto(entity))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<MemberDTO> getDepartmentMembers(Long id) throws Exception{
+        /*Optional<List<Member>> members = departmentRepository.findMembers(id);
+        //find deprart...
+        //
+        if (members.isPresent()) {
+            //return members.stream().map(entity -> memberConverter.toDto(entity))
+                    //.collect(Collectors.toList());*/
+            return null;
+        /*} else {
+            throw new Exception("Error!");
+        }*/
+    }
+
 }

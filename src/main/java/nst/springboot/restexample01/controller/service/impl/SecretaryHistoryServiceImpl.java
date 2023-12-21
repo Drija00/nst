@@ -5,6 +5,7 @@ import nst.springboot.restexample01.controller.domain.SecretaryHistory;
 import nst.springboot.restexample01.controller.repository.SecretaryHistoryRepository;
 import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
 import nst.springboot.restexample01.converter.impl.SecretaryHistoryConverter;
+import nst.springboot.restexample01.dto.MemberDTO;
 import nst.springboot.restexample01.dto.SecretaryHistoryDTO;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,13 @@ public class SecretaryHistoryServiceImpl implements SecretaryHistoryService {
     public List<SecretaryHistoryDTO> getAll() {
         return repository
                 .findAll()
+                .stream().map(entity -> secretaryHistoryConverter.toDto(entity))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<SecretaryHistoryDTO> getAllByDepartmentId(Long id) {
+        return repository
+                .findAllByDepartmentId(id)
                 .stream().map(entity -> secretaryHistoryConverter.toDto(entity))
                 .collect(Collectors.toList());
     }

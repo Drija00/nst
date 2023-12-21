@@ -35,28 +35,14 @@ public class Department {
     @Size(min = 2, max = 10, message = "Broj znakova je od 2 do 10")
     @Column(name = "shortname")
     private String shortname;
-    @OneToMany
-    @Transient
-    List<Member> members;
-
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
-    @Transient
-    List<HeadHistory> headHistories;
-
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
-    @Transient
-    List<SecretaryHistory> secretaryHistories;
 
     public Department() {
     }
 
-    public Department(Long id, String name, String shortname, List<Member> members, List<HeadHistory> headHistories, List<SecretaryHistory> secretaryHistories) {
+    public Department(Long id, String name, String shortname) {
         this.id = id;
         this.name = name;
         this.shortname = shortname;
-        this.members = members;
-        this.headHistories = headHistories;
-        this.secretaryHistories = secretaryHistories;
     }
 
     public String getName() {
@@ -83,29 +69,6 @@ public class Department {
         this.shortname = shortname;
     }
 
-    public List<Member> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<Member> members) {
-        this.members = members;
-    }
-
-    public List<HeadHistory> getHeadHistories() {
-        return headHistories;
-    }
-
-    public void setHeadHistories(List<HeadHistory> headHistories) {
-        this.headHistories = headHistories;
-    }
-
-    public List<SecretaryHistory> getSecretaryHistories() {
-        return secretaryHistories;
-    }
-
-    public void setSecretaryHistories(List<SecretaryHistory> secretaryHistories) {
-        this.secretaryHistories = secretaryHistories;
-    }
 
     @Override
     public String toString() {

@@ -50,6 +50,12 @@ public class MemberServiceImpl implements MemberService {
                 .stream().map(entity -> memberConverter.toDto(entity))
                 .collect(Collectors.toList());
     }
+    public List<MemberDTO> getAllByDepartmentId(Long id) {
+        return memberRepository
+                .findAllByDepartmentId(id)
+                .stream().map(entity -> memberConverter.toDto(entity))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public void delete(Long id) throws Exception {
@@ -64,14 +70,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO update(MemberDTO memberDTO, Long id) throws Exception {
-        Optional<Member> member= memberRepository.findById(id);
-        if(member.isPresent()){
             Member member1 = memberConverter.toEntity(memberDTO);
             member1 = memberRepository.save(member1);
             return memberConverter.toDto(member1);
-        }else{
-            throw new Exception("Member doesnt exist!");
-        }
     }
 
     @Override

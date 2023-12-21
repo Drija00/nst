@@ -4,8 +4,10 @@
  */
 package nst.springboot.restexample01.controller.repository;
 
+import java.util.List;
 import java.util.Optional;
 import nst.springboot.restexample01.controller.domain.Department;
+import nst.springboot.restexample01.controller.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,4 +25,5 @@ public interface DepartmentRepository extends JpaRepository<Department, Long>{
   
     //vrati depratment na osnovu imena
     Optional<Department> findByName(String name);
+
 }

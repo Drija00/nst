@@ -7,10 +7,18 @@ package nst.springboot.restexample01.controller;
 import jakarta.validation.Valid;
 import java.util.List;
 import nst.springboot.restexample01.controller.domain.Department;
+import nst.springboot.restexample01.controller.repository.SecretaryHistoryRepository;
 import nst.springboot.restexample01.controller.service.DepartmentService;
+import nst.springboot.restexample01.controller.service.HeadHistoryService;
+import nst.springboot.restexample01.controller.service.MemberService;
+import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
 import nst.springboot.restexample01.dto.DepartmentDto;
+import nst.springboot.restexample01.dto.HeadHistoryDTO;
+import nst.springboot.restexample01.dto.MemberDTO;
+import nst.springboot.restexample01.dto.SecretaryHistoryDTO;
 import nst.springboot.restexample01.exception.DepartmentAlreadyExistException;
 import nst.springboot.restexample01.exception.MyErrorDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,11 +40,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class DepartmentController {
 
     private DepartmentService departmentService;
+    private MemberService memberService;
+    private SecretaryHistoryService secretaryHistoryService;
+    private HeadHistoryService headHistoryService;
 
-    public DepartmentController(DepartmentService departmentService) {
+    public DepartmentController(DepartmentService departmentService, MemberService memberService, SecretaryHistoryService secretaryHistoryService, HeadHistoryService headHistoryService) {
         this.departmentService = departmentService;
-        System.out.println("nst.springboot.restexample01.controller.DepartmentController.<init>()");
-        System.out.println("kreiran je konroller!");
+        this.memberService = memberService;
+        this.secretaryHistoryService = secretaryHistoryService;
+        this.headHistoryService = headHistoryService;
     }
 
     //dodaj novi department
@@ -76,6 +88,21 @@ public class DepartmentController {
     public DepartmentDto findById(@PathVariable("id") Long id) throws Exception {
         System.out.println("Controller: " + id);
         return departmentService.findById(id);
+    }
+    @GetMapping("/dep-mem/{id}")
+    public List<MemberDTO> findMembers(@PathVariable("id") Long id) throws Exception {
+        System.out.println("Controller: " + id);
+        return memberService.getAllByDepartmentId(id);
+    }
+    @GetMapping("/dep-head/{id}")
+    public List<HeadHistoryDTO> findHeadHistories(@PathVariable("id") Long id) throws Exception {
+        System.out.println("Controller: " + id);
+        return headHistoryService.getAllByDepartmentId(id);
+    }
+    @GetMapping("/dep-sec/{id}")
+    public List<SecretaryHistoryDTO> findSecretaryHistories(@PathVariable("id") Long id) throws Exception {
+        System.out.println("Controller: " + id);
+        return secretaryHistoryService.getAllByDepartmentId(id);
     }
 
     //pronadji na osnovu ID/a

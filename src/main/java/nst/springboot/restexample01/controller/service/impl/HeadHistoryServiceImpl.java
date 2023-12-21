@@ -9,6 +9,7 @@ import nst.springboot.restexample01.controller.service.HeadHistoryService;
 import nst.springboot.restexample01.converter.impl.HeadHistoryConverter;
 import nst.springboot.restexample01.converter.impl.MemberHeadSecConverter;
 import nst.springboot.restexample01.dto.HeadHistoryDTO;
+import nst.springboot.restexample01.dto.MemberDTO;
 import nst.springboot.restexample01.dto.MemberHeadSecDTO;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,13 @@ public class HeadHistoryServiceImpl implements HeadHistoryService {
     public List<HeadHistoryDTO> getAll() {
         return repository
                 .findAll()
+                .stream().map(entity -> headHistoryConverter.toDto(entity))
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<HeadHistoryDTO> getAllByDepartmentId(Long id) {
+        return repository
+                .findAllByDepartmentId(id)
                 .stream().map(entity -> headHistoryConverter.toDto(entity))
                 .collect(Collectors.toList());
     }

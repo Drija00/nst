@@ -29,7 +29,7 @@ public class DepartmentConverter implements DtoEntityConverter<DepartmentDto, De
 
     @Override
     public Department toEntity(DepartmentDto dto) {
-        return new Department(dto.getId(), dto.getName(),dto.getShortname(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
+        return new Department(dto.getId(), dto.getName(),dto.getShortname());
     }
 
 
