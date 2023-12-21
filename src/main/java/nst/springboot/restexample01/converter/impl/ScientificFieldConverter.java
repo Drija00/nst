@@ -20,4 +20,6 @@ public class ScientificFieldConverter implements DtoEntityConverter<ScientificFi
                 dto.getId(),
                 dto.getName());
     }
+
+
 }

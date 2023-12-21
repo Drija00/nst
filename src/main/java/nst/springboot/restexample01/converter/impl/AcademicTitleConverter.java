@@ -20,4 +20,5 @@ public class AcademicTitleConverter implements DtoEntityConverter<AcademicTitleD
                 dto.getId(),
                 dto.getName());
     }
+
 }

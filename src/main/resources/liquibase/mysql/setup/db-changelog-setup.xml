@@ -41,6 +41,14 @@
         <sqlFile path="ddl/create-ath.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="create-head-history" author="andrija">
+        <sqlFile path="ddl/create-head-history.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="create-secretary-history" author="andrija">
+        <sqlFile path="ddl/create-secretary-history.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
     <changeSet id="init-subject" author="andrija">
         <sqlFile path="dml/init-subject.sql" relativeToChangelogFile="true"/>
     </changeSet>
@@ -65,13 +73,13 @@
         <sqlFile path="dml/init_ath.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
-    <changeSet id="alter-department" author="andrija">
+    <!--<changeSet id="alter-department" author="andrija">
         <sqlFile path="ddl/alter-department.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="update-department" author="andrija">
         <sqlFile path="dml/update-department.sql" relativeToChangelogFile="true"/>
-    </changeSet>
+    </changeSet>-->
 
 
 </databaseChangeLog>

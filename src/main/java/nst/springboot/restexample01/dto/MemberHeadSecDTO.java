@@ -1,20 +1,9 @@
 package nst.springboot.restexample01.dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import nst.springboot.restexample01.controller.domain.AcademicTitle;
-import nst.springboot.restexample01.controller.domain.Department;
-import nst.springboot.restexample01.controller.domain.EducationTitle;
-import nst.springboot.restexample01.controller.domain.ScientificField;
 
-
-public class MemberDTO {
-
+public class MemberHeadSecDTO {
     Long id;
     @NotNull
     @Size(min = 2, max = 20, message = "Broj znakova je od 2 do 20")
@@ -29,11 +18,11 @@ public class MemberDTO {
 
     ScientificFieldDTO scientificField;
 
-    DepartmentDto department;
+    Long department;
 
-    public MemberDTO(){}
+    public MemberHeadSecDTO(){}
 
-    public MemberDTO(Long id, String firstname, String lastname, AcademicTitleDTO academicTitle, EducationTitleDTO educationTitle, ScientificFieldDTO scientificField, DepartmentDto department) {
+    public MemberHeadSecDTO(Long id, String firstname, String lastname, AcademicTitleDTO academicTitle, EducationTitleDTO educationTitle, ScientificFieldDTO scientificField, Long department) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -91,17 +80,17 @@ public class MemberDTO {
         this.scientificField = scientificField;
     }
 
-    public DepartmentDto getDepartment() {
+    public Long getDepartment() {
         return department;
     }
 
-    public void setDepartment(DepartmentDto department) {
+    public void setDepartment(Long department) {
         this.department = department;
     }
 
     @Override
     public String toString() {
-        return "MemberDTO{" +
+        return "MemberHeadSecDTO{" +
                 "id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +

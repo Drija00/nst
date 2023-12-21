@@ -7,9 +7,16 @@ package nst.springboot.restexample01.dto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import nst.springboot.restexample01.controller.domain.HeadHistory;
+import nst.springboot.restexample01.controller.domain.Member;
+import nst.springboot.restexample01.controller.domain.SecretaryHistory;
+
 import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -25,18 +32,14 @@ public class DepartmentDto implements Serializable{
     @NotNull
     @Size(min = 2,max = 10, message = "Broj znakova [2-10]")
     private String shortname;
-    private MemberDTO head;
-    private MemberDTO secretary;
 
     public DepartmentDto() {
     }
 
-    public DepartmentDto(Long id, String name, String shortname, MemberDTO head, MemberDTO secretary) {
+    public DepartmentDto(Long id, String name, String shortname) {
         this.id = id;
         this.name = name;
         this.shortname = shortname;
-        this.head = head;
-        this.secretary = secretary;
     }
 
     public Long getId() {
@@ -63,19 +66,12 @@ public class DepartmentDto implements Serializable{
         this.shortname = shortname;
     }
 
-    public MemberDTO getHead() {
-        return head;
-    }
-
-    public void setHead(MemberDTO head) {
-        this.head = head;
-    }
-
-    public MemberDTO getSecretary() {
-        return secretary;
-    }
-
-    public void setSecretary(MemberDTO secretary) {
-        this.secretary = secretary;
+    @Override
+    public String toString() {
+        return "DepartmentDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", shortname='" + shortname + '\'' +
+                '}';
     }
 }

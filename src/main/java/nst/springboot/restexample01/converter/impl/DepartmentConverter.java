@@ -11,6 +11,8 @@ import nst.springboot.restexample01.dto.DepartmentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author student2
@@ -19,19 +21,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class DepartmentConverter implements DtoEntityConverter<DepartmentDto, Department>{
 
-    @Autowired
-    private MemberConverter memberConverter;
 
     @Override
-    @JsonIgnore
     public DepartmentDto toDto(Department entity) {
-        return new DepartmentDto(entity.getId(), entity.getName(), entity.getShortname(),memberConverter.toDto(entity.getHead()),memberConverter.toDto(entity.getSecretary()));
+        return new DepartmentDto(entity.getId(), entity.getName(), entity.getShortname());
     }
 
     @Override
-    @JsonIgnore
     public Department toEntity(DepartmentDto dto) {
-        return new Department(dto.getId(), dto.getName(),dto.getShortname(),memberConverter.toEntity(dto.getHead()),memberConverter.toEntity(dto.getSecretary()));
+        return new Department(dto.getId(), dto.getName(),dto.getShortname(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>());
     }
-    
+
+
+
 }

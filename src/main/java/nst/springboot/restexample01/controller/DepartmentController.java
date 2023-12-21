@@ -11,9 +11,6 @@ import nst.springboot.restexample01.controller.service.DepartmentService;
 import nst.springboot.restexample01.dto.DepartmentDto;
 import nst.springboot.restexample01.exception.DepartmentAlreadyExistException;
 import nst.springboot.restexample01.exception.MyErrorDetails;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,7 +53,7 @@ public class DepartmentController {
         return new ResponseEntity<>(departments, HttpStatus.OK);
     }
 
-    @GetMapping("/paging")
+    /*@GetMapping("/paging")
     public ResponseEntity<List<DepartmentDto>> getAllByPage(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "pageSize", defaultValue = "2") int pageSize,
@@ -71,7 +68,7 @@ public class DepartmentController {
         }
         List<DepartmentDto> departments = departmentService.getAll(pageable);
         return new ResponseEntity<>(departments, HttpStatus.OK);
-    }
+    }*/
 
     //pronadji na osnovu ID/a
     //localhost:8080/department/1
@@ -84,7 +81,7 @@ public class DepartmentController {
     //pronadji na osnovu ID/a
     //localhost:8080/department/query?id=1
     @GetMapping("/query")
-    public Department queryById(@RequestParam("id") Long id) throws Exception {
+    public DepartmentDto queryById(@RequestParam("id") Long id) throws Exception {
         //return departmentService.findById(id);
         throw new Exception("Nije implementirana.");
     }

@@ -26,11 +26,10 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentConverter departmentConverter;
     private DepartmentRepository departmentRepository;
 
-    public DepartmentServiceImpl(
-            DepartmentRepository departmentRepository,
-            DepartmentConverter departmentConverter) {
-        this.departmentRepository = departmentRepository;
+
+    public DepartmentServiceImpl(DepartmentConverter departmentConverter, DepartmentRepository departmentRepository) {
         this.departmentConverter = departmentConverter;
+        this.departmentRepository = departmentRepository;
     }
 
     @Override

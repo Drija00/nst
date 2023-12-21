@@ -1,13 +1,11 @@
 package nst.springboot.restexample01.controller.service.impl;
 
-import nst.springboot.restexample01.controller.domain.EducationTitle;
+import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.repository.*;
 import nst.springboot.restexample01.controller.service.MemberService;
-import nst.springboot.restexample01.controller.service.ScientificFieldService;
 import nst.springboot.restexample01.converter.impl.*;
 import nst.springboot.restexample01.dto.MemberDTO;
-import nst.springboot.restexample01.dto.ScientificFieldDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,27 +16,31 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
 
     private MemberConverter memberConverter;
+
     private MemberRepository memberRepository;
-    /*private AcademicTitleConverter academicTitleConverter;
-    private EducationTitleConverter educationTitleConverter;
-    private ScientificFieldConverter scientificFieldConverter;
-    private DepartmentConverter departmentConverter;
 
-    private AcademicTitleRepository academicTitleRepository;
-    private EducationTitleRepository educationTitleRepository;
-    private ScientificFieldRepository scientificFieldRepository;
-    private DepartmentRepository departmentRepository;*/
+    private DepartmentRepository departmentRepository;
 
-    public MemberServiceImpl(MemberConverter memberConverter, MemberRepository memberRepository) {
+    public MemberServiceImpl(MemberConverter memberConverter, MemberRepository memberRepository, DepartmentRepository departmentRepository) {
         this.memberConverter = memberConverter;
         this.memberRepository = memberRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     @Override
     public MemberDTO save(MemberDTO memberDTO) throws Exception {
         Member member = memberConverter.toEntity(memberDTO);
-        member = memberRepository.save(member);
-        return memberConverter.toDto(member);
+        if(member.getDepartment().getId()==null){
+            throw new Exception("Department id is required!");
+        }else{
+            Optional<Department> dep = departmentRepository.findById(member.getDepartment().getId());
+            if(dep.isEmpty()){
+                throw new Exception("Department doesn't exist!");
+            }
+        }
+        memberRepository.save(member);
+        return memberDTO;
+        //ako department ne postoji sacuvaj i department zajedno sa Subject/om
     }
 
     @Override
@@ -61,8 +63,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void update(MemberDTO memberDTO) throws Exception {
-        throw new Exception();
+    public MemberDTO update(MemberDTO memberDTO, Long id) throws Exception {
+        Optional<Member> member= memberRepository.findById(id);
+        if(member.isPresent()){
+            Member member1 = memberConverter.toEntity(memberDTO);
+            member1 = memberRepository.save(member1);
+            return memberConverter.toDto(member1);
+        }else{
+            throw new Exception("Member doesnt exist!");
+        }
     }
 
     @Override

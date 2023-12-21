@@ -37,5 +37,6 @@ public class SubjectConverter implements DtoEntityConverter<SubjectDto, Subject>
                 dto.getEsbp(),
         departmentConverter.toEntity(dto.getDepartmentDto()));
     }
-    
+
+
 }

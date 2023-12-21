@@ -25,6 +25,13 @@ public class MemberController {
         return new ResponseEntity<>(member, HttpStatus.CREATED);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<MemberDTO> update(@Valid @RequestBody MemberDTO memberDTO, @RequestParam Long id) throws Exception {
+        //ResponseEntity
+        MemberDTO member = memberService.update(memberDTO,id);
+        return new ResponseEntity<>(member, HttpStatus.CREATED);
+    }
+
     @GetMapping
     public ResponseEntity<List<MemberDTO>> getAll() {
         List<MemberDTO> members = memberService.getAll();

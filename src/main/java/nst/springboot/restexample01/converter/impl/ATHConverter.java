@@ -45,4 +45,6 @@ public class ATHConverter implements DtoEntityConverter<ATHDto,AcademicTitleHist
                 academicTitleConverter.toEntity(dto.getAcademicTitle()),
                 scientificFieldConverter.toEntity(dto.getScientificField()));
     }
+
+
 }

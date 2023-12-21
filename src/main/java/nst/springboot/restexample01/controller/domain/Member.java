@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table(name = "tbl_member")
@@ -39,6 +40,7 @@ public class Member {
     Department department;
 
     public Member(){}
+
 
     public Member(Long id, String firstname, String lastname, AcademicTitle academicTitle, EducationTitle educationTitle, ScientificField scientificField, Department department) {
         this.id = id;
