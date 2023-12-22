@@ -20,6 +20,6 @@ public interface DepartmentService {
     List<DepartmentDto> getAll();
     List<MemberDTO> getDepartmentMembers(Long id) throws Exception;
     void delete(Long id) throws Exception;
-    void update(DepartmentDto department) throws Exception;
+    DepartmentDto update(DepartmentDto department) throws Exception;
     DepartmentDto findById(Long id) throws Exception;
 }

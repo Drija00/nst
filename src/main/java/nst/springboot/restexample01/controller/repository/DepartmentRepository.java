@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface DepartmentRepository extends JpaRepository<Department, Long>{
 
     @Override
-    @Transactional(propagation = Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.NESTED)
     public <S extends Department> S save(S entity);
   
     //vrati depratment na osnovu imena

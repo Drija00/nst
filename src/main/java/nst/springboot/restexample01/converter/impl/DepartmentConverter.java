@@ -8,10 +8,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.converter.DtoEntityConverter;
 import nst.springboot.restexample01.dto.DepartmentDto;
+import nst.springboot.restexample01.dto.MemberHeadSecDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -20,7 +22,8 @@ import java.util.ArrayList;
 
 @Component
 public class DepartmentConverter implements DtoEntityConverter<DepartmentDto, Department>{
-
+    @Autowired
+    private MemberConverter memberHeadSecConverter;
 
     @Override
     public DepartmentDto toDto(Department entity) {

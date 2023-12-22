@@ -34,7 +34,7 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "scientific_field_id")
     ScientificField scientificField;
-
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "department_id")
     Department department;
@@ -106,5 +106,18 @@ public class Member {
 
     public void setDepartment(Department department) {
         this.department = department;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", academicTitle=" + academicTitle +
+                ", educationTitle=" + educationTitle +
+                ", scientificField=" + scientificField +
+                ", department=" + department +
+                '}';
     }
 }

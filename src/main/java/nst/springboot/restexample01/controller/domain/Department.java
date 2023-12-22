@@ -7,6 +7,7 @@ package nst.springboot.restexample01.controller.domain;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -35,6 +36,15 @@ public class Department {
     @Size(min = 2, max = 10, message = "Broj znakova je od 2 do 10")
     @Column(name = "shortname")
     private String shortname;
+
+    @OneToOne(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Member head;
+
+    @OneToOne(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Member secretary;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<Member> otherMembers;
 
     public Department() {
     }
@@ -69,6 +79,30 @@ public class Department {
         this.shortname = shortname;
     }
 
+    public Member getHead() {
+        return head;
+    }
+
+    public void setHead(Member head) {
+        if(head.getAcademicTitle().getId().equals(7L))
+            this.head = head;
+    }
+
+    public Member getSecretary() {
+        return secretary;
+    }
+
+    public void setSecretary(Member secretary) {
+        this.secretary = secretary;
+    }
+
+    public List<Member> getOtherMembers() {
+        return otherMembers;
+    }
+
+    public void setOtherMembers(List<Member> otherMembers) {
+        this.otherMembers = otherMembers;
+    }
 
     @Override
     public String toString() {
@@ -77,5 +111,28 @@ public class Department {
                 ", name='" + name + '\'' +
                 ", shortname='" + shortname + '\'' +
                 '}';
+    }
+
+    public void setAllMembers(){
+        head = null;
+        secretary=null;
+        for(Member m : otherMembers){
+            if(m.getAcademicTitle().getId().equals(7L)){
+                head = m;
+            }else if(m.getAcademicTitle().getId().equals(6L)){
+                secretary = m;
+            }
+        }
+    }
+
+    public void addMember(Member member) {
+        if(member.getAcademicTitle().getId().equals(7L)){
+            head = member;
+        }else if(member.getAcademicTitle().getId().equals(6L)){
+            secretary = member;
+        }else {
+            otherMembers.add(member);
+        }
+        member.setDepartment(this);
     }
 }

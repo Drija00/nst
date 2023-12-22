@@ -1,5 +1,6 @@
 package nst.springboot.restexample01.controller.service.impl;
 
+import nst.springboot.restexample01.controller.domain.AcademicTitle;
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.repository.*;
@@ -36,9 +37,17 @@ public class MemberServiceImpl implements MemberService {
             Optional<Department> dep = departmentRepository.findById(member.getDepartment().getId());
             if(dep.isEmpty()){
                 throw new Exception("Department doesn't exist!");
+            }else {
+                Department department = dep.get();
+                System.out.println(department.getHead()+"   before");
+                department.setAllMembers();
+                System.out.println(department.getHead()+"   after");
+                validateMember(member,department);
+                memberRepository.save(member);
+                dep.get().addMember(member);
+                departmentRepository.save(dep.get());
             }
         }
-        memberRepository.save(member);
         return memberDTO;
         //ako department ne postoji sacuvaj i department zajedno sa Subject/om
     }
@@ -83,6 +92,13 @@ public class MemberServiceImpl implements MemberService {
             return memberConverter.toDto(member1);
         } else {
             throw new Exception("Member title does not exist!");
+        }
+    }
+
+    private void validateMember(Member newMember,Department department) throws Exception {
+        if ((newMember.getAcademicTitle().getId().equals(7L) && department.getHead() != null)
+                || (newMember.getAcademicTitle().getId().equals(6L) && department.getSecretary() != null)) {
+            throw new Exception("The department already has a member with the specified academic title.");
         }
     }
 }

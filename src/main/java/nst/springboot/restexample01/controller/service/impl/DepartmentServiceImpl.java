@@ -65,8 +65,17 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public void update(DepartmentDto department) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public DepartmentDto update(DepartmentDto departmentDto) throws Exception {
+        Optional<Department> dept = departmentRepository.findByName(departmentDto.getName());
+        if (dept.isPresent()) {
+            throw new DepartmentAlreadyExistException("Department sa tim imenom postoji!");
+        } else {
+            //DTO - > Entity
+            //Department department = new Department(departmentDto.getId(), departmentDto.getName());
+            Department department = departmentConverter.toEntity(departmentDto);
+            department = departmentRepository.save(department);
+            return departmentConverter.toDto(department);
+        }
     }
 
     @Override
@@ -75,6 +84,9 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (dept.isPresent()) {
             //postoji
             Department department = dept.get();
+            department.setAllMembers();
+            System.out.println(department.getOtherMembers().size()+" adasdasdadasdadadadadaadadadadsadsadas");
+            System.out.println(department.getHead());
             return departmentConverter.toDto(department);
         } else {
             throw new Exception("Department does not exist!");
