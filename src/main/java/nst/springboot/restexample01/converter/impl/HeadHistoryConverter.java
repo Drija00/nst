@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class HeadHistoryConverter implements DtoEntityConverter<HeadHistoryDTO, HeadHistory> {
     @Autowired
-    private MemberHeadSecConverter memberHeadSecConverter;
+    private MemberConverter memberConverter;
     @Autowired
     private DepartmentConverter departmentConverter;
 
@@ -22,7 +22,7 @@ public class HeadHistoryConverter implements DtoEntityConverter<HeadHistoryDTO, 
                 headHistory.getId(),
                 headHistory.getStartDate(),
                 headHistory.getEndDate(),
-                memberHeadSecConverter.toDto(headHistory.getMember()),
+                memberConverter.toDto(headHistory.getMember()),
                 departmentConverter.toDto(headHistory.getDepartment()));
     }
 
@@ -32,7 +32,7 @@ public class HeadHistoryConverter implements DtoEntityConverter<HeadHistoryDTO, 
                 headHistoryDTO.getId(),
                 headHistoryDTO.getStartDate(),
                 headHistoryDTO.getEndDate(),
-                memberHeadSecConverter.toEntity(headHistoryDTO.getHead()),
+                memberConverter.toEntity(headHistoryDTO.getHead()),
                 departmentConverter.toEntity(headHistoryDTO.getDepartment()));
     }
 }

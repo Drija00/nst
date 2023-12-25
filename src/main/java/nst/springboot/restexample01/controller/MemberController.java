@@ -25,15 +25,36 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<MemberDTO> save(@Valid @RequestBody MemberDTO memberDTO) throws Exception {
+    public ResponseEntity<MemberDTO> save(@Valid @RequestBody MemberHeadSecDTO memberDTO) throws Exception {
         //ResponseEntity
         MemberDTO member = memberService.save(memberDTO);
         return new ResponseEntity<>(member, HttpStatus.CREATED);
     }
-
     @PutMapping("/{id}")
-    public ResponseEntity<MemberDTO> update(@Valid @RequestBody MemberDTO memberDTO, @RequestParam Long id) throws Exception {
-        MemberDTO member = memberService.update(memberDTO, id);
+    public ResponseEntity<MemberDTO> update(@Valid @RequestBody MemberHeadSecDTO memberDTO, @PathVariable Long id) throws Exception {
+        MemberDTO member = memberService.update(memberDTO,id);
+        return new ResponseEntity<>(member, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/set-sec")
+    public ResponseEntity<MemberDTO> setSec(@RequestParam Long idMember) throws Exception {
+        MemberDTO member = memberService.setSec(idMember);
+        return new ResponseEntity<>(member, HttpStatus.OK);
+    }
+
+    @PatchMapping("/set-head")
+    public ResponseEntity<MemberDTO> setHead(@RequestParam Long idMember) throws Exception {
+        MemberDTO member = memberService.setHead(idMember);
+        return new ResponseEntity<>(member, HttpStatus.OK);
+    }
+    @PatchMapping("/remove-head")
+    public ResponseEntity<MemberDTO> removeHead(@RequestParam Long idMember) throws Exception {
+        MemberDTO member = memberService.removeHead(idMember);
+        return new ResponseEntity<>(member, HttpStatus.OK);
+    }
+    @PatchMapping("/remove-sec")
+    public ResponseEntity<MemberDTO> removeSec(@RequestParam Long idMember) throws Exception {
+        MemberDTO member = memberService.removeSec(idMember);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
 

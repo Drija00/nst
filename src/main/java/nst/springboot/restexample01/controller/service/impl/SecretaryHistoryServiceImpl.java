@@ -42,9 +42,9 @@ public class SecretaryHistoryServiceImpl implements SecretaryHistoryService {
     }
     @Override
     public SecretaryHistoryDTO getByDepartmentId(Long id) throws Exception {
-        Optional<SecretaryHistory> secretaryHistory = repository.findByDepartmentId(id);
+        Optional<SecretaryHistory> secretaryHistory = repository.findByDepartmentIdAndEndDateNull(id);
         if(secretaryHistory.isEmpty()){
-            throw new Exception("Department doesn't have secretary member");
+            throw new Exception("Department doesn't have active secretary member");
         }
         return secretaryHistoryConverter.toDto(secretaryHistory.get());
     }

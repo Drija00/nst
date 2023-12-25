@@ -13,12 +13,12 @@ public class HeadHistoryDTO implements Serializable {
     Long id;
     LocalDate startDate;
     LocalDate endDate;
-    MemberHeadSecDTO head;
+    MemberDTO head;
     DepartmentDto department;
 
     public HeadHistoryDTO(){}
 
-    public HeadHistoryDTO(Long id, LocalDate startDate, LocalDate endDate, MemberHeadSecDTO head, DepartmentDto department) {
+    public HeadHistoryDTO(Long id, LocalDate startDate, LocalDate endDate, MemberDTO head, DepartmentDto department) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -50,11 +50,11 @@ public class HeadHistoryDTO implements Serializable {
         this.endDate = endDate;
     }
 
-    public MemberHeadSecDTO getHead() {
+    public MemberDTO getHead() {
         return head;
     }
 
-    public void setHead(MemberHeadSecDTO head) {
+    public void setHead(MemberDTO head) {
         this.head = head;
     }
 

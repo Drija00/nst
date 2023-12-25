@@ -45,9 +45,9 @@ public class HeadHistoryServiceImpl implements HeadHistoryService {
     }
     @Override
     public HeadHistoryDTO getByDepartmentId(Long id) throws Exception {
-        Optional<HeadHistory> headHistory = repository.findByDepartmentId(id);
+        Optional<HeadHistory> headHistory = repository.findByDepartmentIdAndEndDateNull(id);
         if(headHistory.isEmpty()){
-            throw new Exception("Department doesn't have head member");
+            throw new Exception("Department doesn't have active head member");
         }
         return headHistoryConverter.toDto(headHistory.get());
     }

@@ -57,8 +57,8 @@ public class SubjectServiceImpl implements SubjectService {
             //throw new Exception("Subject doesn't exist!");
             }
         }
-        subjectRepository.save(subject);
-        return subjectDto;
+        Subject s = subjectRepository.save(subject);
+        return subjectConverter.toDto(s);
         //ako department ne postoji sacuvaj i department zajedno sa Subject/om
     }
 

@@ -17,18 +17,18 @@ public class SecretaryHistory {
     LocalDate endDate;
     @ManyToOne
     @JoinColumn(name = "member_id")
-    Member secretary;
+    Member member;
     @ManyToOne
     @JoinColumn(name = "department_id")
     Department department;
 
     public SecretaryHistory(){}
 
-    public SecretaryHistory(Long id, LocalDate startDate, LocalDate endDate, Member secretary, Department department) {
+    public SecretaryHistory(Long id, LocalDate startDate, LocalDate endDate, Member member, Department department) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.secretary = secretary;
+        this.member = member;
         this.department = department;
     }
 
@@ -56,12 +56,12 @@ public class SecretaryHistory {
         this.endDate = endDate;
     }
 
-    public Member getSecretary() {
-        return secretary;
+    public Member getMember() {
+        return member;
     }
 
-    public void setSecretary(Member secretary) {
-        this.secretary = secretary;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public Department getDepartment() {

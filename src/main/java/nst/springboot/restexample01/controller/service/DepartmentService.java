@@ -22,4 +22,6 @@ public interface DepartmentService {
     void delete(Long id) throws Exception;
     DepartmentDto update(DepartmentDto department) throws Exception;
     DepartmentDto findById(Long id) throws Exception;
+
+
 }

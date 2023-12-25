@@ -17,18 +17,18 @@ public class HeadHistory {
     LocalDate endDate;
     @ManyToOne
     @JoinColumn(name = "member_id")
-    Member head;
+    Member member;
     @ManyToOne
     @JoinColumn(name = "department_id")
     Department department;
 
     public HeadHistory(){}
 
-    public HeadHistory(Long id, LocalDate startDate, LocalDate endDate, Member head, Department department) {
+    public HeadHistory(Long id, LocalDate startDate, LocalDate endDate, Member member, Department department) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.head = head;
+        this.member = member;
         this.department = department;
     }
 
@@ -57,11 +57,11 @@ public class HeadHistory {
     }
 
     public Member getMember() {
-        return head;
+        return member;
     }
 
-    public void setMember(Member head) {
-        this.head = head;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public Department getDepartment() {
@@ -72,14 +72,5 @@ public class HeadHistory {
         this.department = department;
     }
 
-    @Override
-    public String toString() {
-        return "HeadHistory{" +
-                "id=" + id +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", head=" + head +
-                ", department=" + department +
-                '}';
-    }
+
 }

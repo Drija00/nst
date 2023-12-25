@@ -50,12 +50,12 @@ public class DepartmentController {
         DepartmentDto deptDto = departmentService.save(departmentDto);
         return new ResponseEntity<>(deptDto, HttpStatus.CREATED);
     }
-    @PutMapping
+    /*@PutMapping
     public ResponseEntity<DepartmentDto> update(@Valid @RequestBody DepartmentDto departmentDto) throws Exception {
         //ResponseEntity
         DepartmentDto deptDto = departmentService.save(departmentDto);
         return new ResponseEntity<>(deptDto, HttpStatus.CREATED);
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<List<DepartmentDto>> getAll() {

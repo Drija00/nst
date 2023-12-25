@@ -12,12 +12,12 @@ public class SecretaryHistoryDTO implements Serializable {
     Long id;
     LocalDate startDate;
     LocalDate endDate;
-    MemberHeadSecDTO secretary;
+    MemberDTO secretary;
     DepartmentDto department;
 
     public SecretaryHistoryDTO(){}
 
-    public SecretaryHistoryDTO(Long id, LocalDate startDate, LocalDate endDate, MemberHeadSecDTO secretary, DepartmentDto department) {
+    public SecretaryHistoryDTO(Long id, LocalDate startDate, LocalDate endDate, MemberDTO secretary, DepartmentDto department) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -49,11 +49,11 @@ public class SecretaryHistoryDTO implements Serializable {
         this.endDate = endDate;
     }
 
-    public MemberHeadSecDTO getSecretary() {
+    public MemberDTO getSecretary() {
         return secretary;
     }
 
-    public void setSecretary(MemberHeadSecDTO secretary) {
+    public void setSecretary(MemberDTO secretary) {
         this.secretary = secretary;
     }
 

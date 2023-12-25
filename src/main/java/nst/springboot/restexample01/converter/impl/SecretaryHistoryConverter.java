@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecretaryHistoryConverter implements DtoEntityConverter<SecretaryHistoryDTO, SecretaryHistory> {
     @Autowired
-    private MemberHeadSecConverter memberHeadSecConverter;
+    private MemberConverter memberConverter;
     @Autowired
     private DepartmentConverter departmentConverter;
     @Override
@@ -20,7 +20,7 @@ public class SecretaryHistoryConverter implements DtoEntityConverter<SecretaryHi
                 secretaryHistory.getId(),
                 secretaryHistory.getStartDate(),
                 secretaryHistory.getEndDate(),
-                memberHeadSecConverter.toDto(secretaryHistory.getSecretary()),
+                memberConverter.toDto(secretaryHistory.getMember()),
                 departmentConverter.toDto(secretaryHistory.getDepartment()));
     }
 
@@ -30,7 +30,7 @@ public class SecretaryHistoryConverter implements DtoEntityConverter<SecretaryHi
                 secretaryHistoryDTO.getId(),
                 secretaryHistoryDTO.getStartDate(),
                 secretaryHistoryDTO.getEndDate(),
-                memberHeadSecConverter.toEntity(secretaryHistoryDTO.getSecretary()),
+                memberConverter.toEntity(secretaryHistoryDTO.getSecretary()),
                 departmentConverter.toEntity(secretaryHistoryDTO.getDepartment()));
     }
 }

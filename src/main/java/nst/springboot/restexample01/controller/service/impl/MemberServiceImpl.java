@@ -7,6 +7,7 @@ import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
 import nst.springboot.restexample01.converter.impl.*;
 import nst.springboot.restexample01.dto.ATHDto;
 import nst.springboot.restexample01.dto.MemberDTO;
+import nst.springboot.restexample01.dto.MemberHeadSecDTO;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
 
     private MemberConverter memberConverter;
+    private MemberHeadSecConverter memberHeadSecConverter;
 
     private MemberRepository memberRepository;
 
@@ -36,8 +38,9 @@ public class MemberServiceImpl implements MemberService {
     private SecretaryHistoryRepository secretaryHistoryRepository;
     private RoleRepository roleRepository;
 
-    public MemberServiceImpl(MemberConverter memberConverter, MemberRepository memberRepository, DepartmentRepository departmentRepository, AcademicTitleRepository academicTitleRepository, AcademicTitleHistoryRepository academicTitleHistoryRepository, HeadHistoryRepository headHistoryRepository, SecretaryHistoryRepository secretaryHistoryRepository, RoleRepository roleRepository) {
+    public MemberServiceImpl(MemberConverter memberConverter, MemberHeadSecConverter memberHeadSecConverter, MemberRepository memberRepository, DepartmentRepository departmentRepository, AcademicTitleRepository academicTitleRepository, AcademicTitleHistoryRepository academicTitleHistoryRepository, HeadHistoryRepository headHistoryRepository, SecretaryHistoryRepository secretaryHistoryRepository, RoleRepository roleRepository) {
         this.memberConverter = memberConverter;
+        this.memberHeadSecConverter = memberHeadSecConverter;
         this.memberRepository = memberRepository;
         this.departmentRepository = departmentRepository;
         this.academicTitleRepository = academicTitleRepository;
@@ -48,31 +51,26 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO save(MemberDTO memberDTO) throws Exception {
-        Department dep = departmentRepository.findById(memberDTO.getDepartment().getId()).orElseThrow(() -> new Exception("Department doesn't exist!"));
-        Role r = roleRepository.findById(memberDTO.getRole().getId()).orElseThrow(() -> new Exception("Role doesn't exist!"));
-        LocalDate date = LocalDate.now();
-        if(r.getName().equals("Head")){
-            Optional<Member> memberSH = memberRepository.findByRoleIdAndDepartmentId(r.getId(),dep.getId());
-            if (memberSH.isPresent()){
-                throw new Exception("The department already has a member with the specified role.");
-            }
-            Member mH = memberRepository.save(memberConverter.toEntity(memberDTO));
-            headHistoryRepository.save(new HeadHistory(null, date,date.plusYears(1),mH,dep));
-            return memberConverter.toDto(mH);
-        } else if (r.getName().equals("Secretary")) {
-            Optional<Member> memberSH = memberRepository.findByRoleIdAndDepartmentId(r.getId(),dep.getId());
-            if (memberSH.isPresent()){
-                throw new Exception("The department already has a member with the specified role.");
-            }
-            Member mS = memberRepository.save(memberConverter.toEntity(memberDTO));
-            secretaryHistoryRepository.save(new SecretaryHistory(null,date,date.plusYears(1),mS,dep));
-            return memberConverter.toDto(mS);
-        }
-        Member m = memberRepository.save(memberConverter.toEntity(memberDTO));
-        academicTitleHistoryRepository.save(new AcademicTitleHistory(null,date,date.plusYears(1),m,m.getAcademicTitle(),m.getScientificField()));
+    public MemberDTO save(MemberHeadSecDTO memberDTO) throws Exception {
+        Department dep = departmentRepository.findById(memberDTO.getDepartment()).orElseThrow(() -> new Exception("Department doesn't exist!"));
+        Member m = memberRepository.save(memberHeadSecConverter.toEntity(memberDTO));
+        academicTitleHistoryRepository.save(new AcademicTitleHistory(null,LocalDate.now(),null,m,m.getAcademicTitle(),m.getScientificField()));
         return memberConverter.toDto(m);
-        //ako department ne postoji sacuvaj i department zajedno sa Subject/om
+    }
+
+    @Override
+    public MemberDTO update(MemberHeadSecDTO memberDTO, Long id) throws Exception {
+        Member member = memberRepository.findById(id).orElseThrow(()->new Exception("Member doesn't exist"));
+        Department dep = departmentRepository.findById(memberDTO.getDepartment()).orElseThrow(() -> new Exception("Department doesn't exist!"));
+        memberDTO.setId(id);
+        if(!member.getAcademicTitle().getId().equals(memberDTO.getAcademicTitle().getId())){
+            List<AcademicTitleHistory> academicTitles = academicTitleHistoryRepository.findAllByMemberIdAndAcademicTitleIdOrderByStartDateDesc(member.getId(),member.getAcademicTitle().getId());
+            academicTitles.get(0).setEndDate(LocalDate.now());
+            academicTitleHistoryRepository.save(academicTitles.get(0));
+        }
+        Member m = memberRepository.save(memberHeadSecConverter.toEntity(memberDTO));
+        academicTitleHistoryRepository.save(new AcademicTitleHistory(null,LocalDate.now(),null,m,m.getAcademicTitle(),m.getScientificField()));
+        return memberConverter.toDto(m);
     }
 
     @Override
@@ -101,14 +99,62 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO update(MemberDTO memberDTO, Long id) throws Exception {
-        Optional<Member> mem = memberRepository.findById(id);
-        if(mem.isEmpty()){
-            throw new Exception("Member doesn't exist!");
+    public MemberDTO setSec(Long idM) throws Exception {
+        Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
+        LocalDate date = LocalDate.now();
+        Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),2L);
+        if(memberSH.isPresent()){
+            throw  new Exception("The department already has a secretary member.");
         }
-        memberDTO.setId(id);
-        save(memberDTO);
-        return memberDTO;
+        if(mem.getRole().getId().equals(1L)){
+            removeHead(idM);
+        }
+        mem.setRole(new Role(2L,null));
+        Member mH = memberRepository.save(mem);
+        secretaryHistoryRepository.save(new SecretaryHistory(null, LocalDate.now(),null,mH,mem.getDepartment()));
+        return memberConverter.toDto(mH);
+    }
+
+    @Override
+    public MemberDTO setHead(Long idM) throws Exception {
+        Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
+        Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),1L);
+        if(memberSH.isPresent()){
+            throw  new Exception("The department already has a head member.");
+        }
+        if(mem.getRole().getId().equals(2L)){
+            removeSec(idM);
+        }
+        mem.setRole(new Role(1L,null));
+        Member mH = memberRepository.save(mem);
+        headHistoryRepository.save(new HeadHistory(null, LocalDate.now(),null,mH,mem.getDepartment()));
+        return memberConverter.toDto(mH);
+    }
+
+    @Override
+    public MemberDTO removeHead(Long idM) throws Exception {
+        Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
+        mem.setRole(new Role(3L,null));
+        Member mH = memberRepository.save(mem);
+        List<HeadHistory> history = headHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByStartDateDesc(mem.getId(),mem.getDepartment().getId());;
+        if(!history.isEmpty()) {
+            history.get(0).setEndDate(LocalDate.now());
+            headHistoryRepository.save(history.get(0));
+        }
+        return memberConverter.toDto(mH);
+    }
+
+    @Override
+    public MemberDTO removeSec(Long idM) throws Exception {
+        Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
+        mem.setRole(new Role(3L,null));
+        Member mH = memberRepository.save(mem);
+        List<SecretaryHistory> history = secretaryHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByStartDateDesc(mem.getId(),mem.getDepartment().getId());;
+        if(!history.isEmpty()) {
+            history.get(0).setEndDate(LocalDate.now());
+            secretaryHistoryRepository.save(history.get(0));
+        }
+        return memberConverter.toDto(mH);
     }
 
     @Override

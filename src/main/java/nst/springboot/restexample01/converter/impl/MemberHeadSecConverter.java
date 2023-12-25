@@ -2,9 +2,11 @@ package nst.springboot.restexample01.converter.impl;
 
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.Member;
+import nst.springboot.restexample01.controller.domain.Role;
 import nst.springboot.restexample01.converter.DtoEntityConverter;
 import nst.springboot.restexample01.dto.MemberDTO;
 import nst.springboot.restexample01.dto.MemberHeadSecDTO;
+import nst.springboot.restexample01.dto.RoleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +25,7 @@ public class MemberHeadSecConverter implements DtoEntityConverter<MemberHeadSecD
 
     @Override
     public MemberHeadSecDTO toDto(Member entity) {
+        RoleDTO r = new RoleDTO();
         return new MemberHeadSecDTO(
                 entity.getId(),
                 entity.getFirstname(),
@@ -31,14 +34,15 @@ public class MemberHeadSecConverter implements DtoEntityConverter<MemberHeadSecD
                 educationTitleConverter.toDto(entity.getEducationTitle()),
                 scientificFieldConverter.toDto(entity.getScientificField()),
                 entity.getDepartment().getId(),
-                roleConverter.toDto(entity.getRole())
-        );
+                roleConverter.toDto(entity.getRole()));
     }
 
     @Override
     public Member toEntity(MemberHeadSecDTO dto) {
         Department d = new Department();
         d.setId(dto.getDepartment());
+        Role r = new Role();
+        r.setId(3L);
         return new Member(
                 dto.getId(),
                 dto.getFirstname(),
@@ -47,7 +51,7 @@ public class MemberHeadSecConverter implements DtoEntityConverter<MemberHeadSecD
                 educationTitleConverter.toEntity(dto.getEducationTitle()),
                 scientificFieldConverter.toEntity(dto.getScientificField()),
                 d,
-                roleConverter.toEntity(dto.getRoleDTO())
+                r
                 );
     }
 }
