@@ -11,7 +11,7 @@ import java.util.List;
 public interface HeadHistoryService {
     HeadHistoryDTO save(HeadHistoryDTO headHistory)throws Exception;
     List<HeadHistoryDTO> getAll();
-    List<HeadHistoryDTO> getAllByDepartmentId(Long id);
+    HeadHistoryDTO getByDepartmentId(Long id) throws Exception;
     void delete(Long id) throws Exception;
     void update(HeadHistoryDTO headHistory)throws Exception;
     HeadHistoryDTO findById(Long id)throws Exception;

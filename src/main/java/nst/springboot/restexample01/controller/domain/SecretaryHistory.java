@@ -2,6 +2,7 @@ package nst.springboot.restexample01.controller.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -11,9 +12,9 @@ public class SecretaryHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(name = "start_date")
-    Date startDate;
+    LocalDate startDate;
     @Column(name = "end_date")
-    Date endDate;
+    LocalDate endDate;
     @ManyToOne
     @JoinColumn(name = "member_id")
     Member secretary;
@@ -23,7 +24,7 @@ public class SecretaryHistory {
 
     public SecretaryHistory(){}
 
-    public SecretaryHistory(Long id, Date startDate, Date endDate, Member secretary, Department department) {
+    public SecretaryHistory(Long id, LocalDate startDate, LocalDate endDate, Member secretary, Department department) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -39,19 +40,19 @@ public class SecretaryHistory {
         this.id = id;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

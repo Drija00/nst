@@ -93,14 +93,14 @@ public class DepartmentController {
         return memberService.getAllByDepartmentId(id);
     }
     @GetMapping("/dep-head/{id}")
-    public List<HeadHistoryDTO> findHeadHistories(@PathVariable("id") Long id) throws Exception {
+    public HeadHistoryDTO findHeadHistories(@PathVariable("id") Long id) throws Exception {
         System.out.println("Controller: " + id);
-        return headHistoryService.getAllByDepartmentId(id);
+        return headHistoryService.getByDepartmentId(id);
     }
     @GetMapping("/dep-sec/{id}")
-    public List<SecretaryHistoryDTO> findSecretaryHistories(@PathVariable("id") Long id) throws Exception {
+    public SecretaryHistoryDTO findSecretaryHistories(@PathVariable("id") Long id) throws Exception {
         System.out.println("Controller: " + id);
-        return secretaryHistoryService.getAllByDepartmentId(id);
+        return secretaryHistoryService.getByDepartmentId(id);
     }
 
     //pronadji na osnovu ID/a

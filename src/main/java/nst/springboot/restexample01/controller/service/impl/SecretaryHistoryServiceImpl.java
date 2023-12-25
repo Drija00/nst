@@ -41,11 +41,12 @@ public class SecretaryHistoryServiceImpl implements SecretaryHistoryService {
                 .collect(Collectors.toList());
     }
     @Override
-    public List<SecretaryHistoryDTO> getAllByDepartmentId(Long id) {
-        return repository
-                .findAllByDepartmentId(id)
-                .stream().map(entity -> secretaryHistoryConverter.toDto(entity))
-                .collect(Collectors.toList());
+    public SecretaryHistoryDTO getByDepartmentId(Long id) throws Exception {
+        Optional<SecretaryHistory> secretaryHistory = repository.findByDepartmentId(id);
+        if(secretaryHistory.isEmpty()){
+            throw new Exception("Department doesn't have secretary member");
+        }
+        return secretaryHistoryConverter.toDto(secretaryHistory.get());
     }
 
     @Override

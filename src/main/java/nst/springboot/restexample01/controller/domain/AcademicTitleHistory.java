@@ -2,6 +2,7 @@ package nst.springboot.restexample01.controller.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -14,9 +15,9 @@ public class AcademicTitleHistory {
     @JoinColumn(name = "member_id")
     Member member;
     @Column(name = "start_date")
-    Date startDate;
+    LocalDate startDate;
     @Column(name = "end_date")
-    Date endDate;
+    LocalDate endDate;
     @ManyToOne
     @JoinColumn(name = "academic_title_id")
     AcademicTitle academicTitle;
@@ -26,7 +27,7 @@ public class AcademicTitleHistory {
 
     public AcademicTitleHistory(){}
 
-    public AcademicTitleHistory(Long id,Date startDate, Date endDate,Member member, AcademicTitle academicTitle, ScientificField scientificField) {
+    public AcademicTitleHistory(Long id,LocalDate startDate, LocalDate endDate,Member member, AcademicTitle academicTitle, ScientificField scientificField) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -51,19 +52,19 @@ public class AcademicTitleHistory {
         this.member = member;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

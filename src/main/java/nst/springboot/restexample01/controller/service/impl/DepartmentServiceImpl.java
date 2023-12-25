@@ -66,16 +66,19 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto update(DepartmentDto departmentDto) throws Exception {
-        Optional<Department> dept = departmentRepository.findByName(departmentDto.getName());
-        if (dept.isPresent()) {
+        Optional<Department> dept = departmentRepository.findById(departmentDto.getId());
+        if (dept.isEmpty()) {
+            throw new DepartmentAlreadyExistException("Department ne postoji!");
+        }
+        Optional<Department> dept1 = departmentRepository.findByName(departmentDto.getName());
+        if (dept1.isPresent()) {
             throw new DepartmentAlreadyExistException("Department sa tim imenom postoji!");
-        } else {
+        }
             //DTO - > Entity
             //Department department = new Department(departmentDto.getId(), departmentDto.getName());
             Department department = departmentConverter.toEntity(departmentDto);
             department = departmentRepository.save(department);
             return departmentConverter.toDto(department);
-        }
     }
 
     @Override
@@ -84,9 +87,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (dept.isPresent()) {
             //postoji
             Department department = dept.get();
-            department.setAllMembers();
-            System.out.println(department.getOtherMembers().size()+" adasdasdadasdadadadadaadadadadsadsadas");
-            System.out.println(department.getHead());
+            //department.setAllMembers();
             return departmentConverter.toDto(department);
         } else {
             throw new Exception("Department does not exist!");

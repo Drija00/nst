@@ -8,7 +8,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class AcademicTitleDTO {
+import java.io.Serializable;
+
+public class AcademicTitleDTO implements Serializable {
 
     Long id;
 

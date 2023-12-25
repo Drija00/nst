@@ -38,11 +38,13 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "department_id")
     Department department;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    Role role;
 
     public Member(){}
 
-
-    public Member(Long id, String firstname, String lastname, AcademicTitle academicTitle, EducationTitle educationTitle, ScientificField scientificField, Department department) {
+    public Member(Long id, String firstname, String lastname, AcademicTitle academicTitle, EducationTitle educationTitle, ScientificField scientificField, Department department, Role role) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -50,6 +52,15 @@ public class Member {
         this.educationTitle = educationTitle;
         this.scientificField = scientificField;
         this.department = department;
+        this.role = role;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Long getId() {

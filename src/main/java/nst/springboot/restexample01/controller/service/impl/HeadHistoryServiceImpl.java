@@ -44,11 +44,12 @@ public class HeadHistoryServiceImpl implements HeadHistoryService {
                 .collect(Collectors.toList());
     }
     @Override
-    public List<HeadHistoryDTO> getAllByDepartmentId(Long id) {
-        return repository
-                .findAllByDepartmentId(id)
-                .stream().map(entity -> headHistoryConverter.toDto(entity))
-                .collect(Collectors.toList());
+    public HeadHistoryDTO getByDepartmentId(Long id) throws Exception {
+        Optional<HeadHistory> headHistory = repository.findByDepartmentId(id);
+        if(headHistory.isEmpty()){
+            throw new Exception("Department doesn't have head member");
+        }
+        return headHistoryConverter.toDto(headHistory.get());
     }
 
     @Override

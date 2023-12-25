@@ -7,13 +7,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import nst.springboot.restexample01.controller.domain.AcademicTitle;
-import nst.springboot.restexample01.controller.domain.Department;
-import nst.springboot.restexample01.controller.domain.EducationTitle;
-import nst.springboot.restexample01.controller.domain.ScientificField;
+import nst.springboot.restexample01.controller.domain.*;
+
+import java.io.Serializable;
 
 
-public class MemberDTO {
+public class MemberDTO implements Serializable {
 
     Long id;
     @NotNull
@@ -22,18 +21,19 @@ public class MemberDTO {
     @NotNull
     @Size(min = 2, max = 20, message = "Broj znakova je od 2 do 20")
     String lastname;
-
+    @NotNull
     AcademicTitleDTO academicTitle;
-
+    @NotNull
     EducationTitleDTO educationTitle;
-
+    @NotNull
     ScientificFieldDTO scientificField;
-
+    @NotNull
     DepartmentDto department;
+    @NotNull RoleDTO role;
 
     public MemberDTO(){}
 
-    public MemberDTO(Long id, String firstname, String lastname, AcademicTitleDTO academicTitle, EducationTitleDTO educationTitle, ScientificFieldDTO scientificField, DepartmentDto department) {
+    public MemberDTO(Long id, String firstname, String lastname, AcademicTitleDTO academicTitle, EducationTitleDTO educationTitle, ScientificFieldDTO scientificField, DepartmentDto department, RoleDTO role) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -41,6 +41,7 @@ public class MemberDTO {
         this.educationTitle = educationTitle;
         this.scientificField = scientificField;
         this.department = department;
+        this.role = role;
     }
 
     public Long getId() {
@@ -99,6 +100,14 @@ public class MemberDTO {
         this.department = department;
     }
 
+    public RoleDTO getRole() {
+        return role;
+    }
+
+    public void setRole(RoleDTO role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "MemberDTO{" +
@@ -109,6 +118,7 @@ public class MemberDTO {
                 ", educationTitle=" + educationTitle +
                 ", scientificField=" + scientificField +
                 ", department=" + department +
+                ", role=" + role +
                 '}';
     }
 }

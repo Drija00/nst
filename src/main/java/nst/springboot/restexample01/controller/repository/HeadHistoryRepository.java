@@ -5,7 +5,8 @@ import nst.springboot.restexample01.controller.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface HeadHistoryRepository extends JpaRepository<HeadHistory, Long> {
-    List<HeadHistory> findAllByDepartmentId(Long id);
+    Optional<HeadHistory> findByDepartmentId(Long id);
 }

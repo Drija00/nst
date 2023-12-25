@@ -3,7 +3,9 @@ package nst.springboot.restexample01.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class MemberHeadSecDTO {
+import java.io.Serializable;
+
+public class MemberHeadSecDTO implements Serializable {
     Long id;
     @NotNull
     @Size(min = 2, max = 20, message = "Broj znakova je od 2 do 20")
@@ -20,9 +22,11 @@ public class MemberHeadSecDTO {
 
     Long department;
 
+    RoleDTO roleDTO;
+
     public MemberHeadSecDTO(){}
 
-    public MemberHeadSecDTO(Long id, String firstname, String lastname, AcademicTitleDTO academicTitle, EducationTitleDTO educationTitle, ScientificFieldDTO scientificField, Long department) {
+    public MemberHeadSecDTO(Long id, String firstname, String lastname, AcademicTitleDTO academicTitle, EducationTitleDTO educationTitle, ScientificFieldDTO scientificField, Long department, RoleDTO roleDTO) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -30,6 +34,15 @@ public class MemberHeadSecDTO {
         this.educationTitle = educationTitle;
         this.scientificField = scientificField;
         this.department = department;
+        this.roleDTO = roleDTO;
+    }
+
+    public RoleDTO getRoleDTO() {
+        return roleDTO;
+    }
+
+    public void setRoleDTO(RoleDTO roleDTO) {
+        this.roleDTO = roleDTO;
     }
 
     public Long getId() {

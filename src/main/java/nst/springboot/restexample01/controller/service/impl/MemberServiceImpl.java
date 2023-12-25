@@ -1,14 +1,19 @@
 package nst.springboot.restexample01.controller.service.impl;
 
-import nst.springboot.restexample01.controller.domain.AcademicTitle;
-import nst.springboot.restexample01.controller.domain.Department;
-import nst.springboot.restexample01.controller.domain.Member;
+import nst.springboot.restexample01.controller.domain.*;
 import nst.springboot.restexample01.controller.repository.*;
 import nst.springboot.restexample01.controller.service.MemberService;
+import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
 import nst.springboot.restexample01.converter.impl.*;
+import nst.springboot.restexample01.dto.ATHDto;
 import nst.springboot.restexample01.dto.MemberDTO;
+import org.springframework.cglib.core.Local;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,33 +27,51 @@ public class MemberServiceImpl implements MemberService {
 
     private DepartmentRepository departmentRepository;
 
-    public MemberServiceImpl(MemberConverter memberConverter, MemberRepository memberRepository, DepartmentRepository departmentRepository) {
+    private AcademicTitleRepository academicTitleRepository;
+
+    private AcademicTitleHistoryRepository academicTitleHistoryRepository;
+
+    private HeadHistoryRepository headHistoryRepository;
+
+    private SecretaryHistoryRepository secretaryHistoryRepository;
+    private RoleRepository roleRepository;
+
+    public MemberServiceImpl(MemberConverter memberConverter, MemberRepository memberRepository, DepartmentRepository departmentRepository, AcademicTitleRepository academicTitleRepository, AcademicTitleHistoryRepository academicTitleHistoryRepository, HeadHistoryRepository headHistoryRepository, SecretaryHistoryRepository secretaryHistoryRepository, RoleRepository roleRepository) {
         this.memberConverter = memberConverter;
         this.memberRepository = memberRepository;
         this.departmentRepository = departmentRepository;
+        this.academicTitleRepository = academicTitleRepository;
+        this.academicTitleHistoryRepository = academicTitleHistoryRepository;
+        this.headHistoryRepository = headHistoryRepository;
+        this.secretaryHistoryRepository = secretaryHistoryRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public MemberDTO save(MemberDTO memberDTO) throws Exception {
-        Member member = memberConverter.toEntity(memberDTO);
-        if(member.getDepartment().getId()==null){
-            throw new Exception("Department id is required!");
-        }else{
-            Optional<Department> dep = departmentRepository.findById(member.getDepartment().getId());
-            if(dep.isEmpty()){
-                throw new Exception("Department doesn't exist!");
-            }else {
-                Department department = dep.get();
-                System.out.println(department.getHead()+"   before");
-                department.setAllMembers();
-                System.out.println(department.getHead()+"   after");
-                validateMember(member,department);
-                memberRepository.save(member);
-                dep.get().addMember(member);
-                departmentRepository.save(dep.get());
+        Department dep = departmentRepository.findById(memberDTO.getDepartment().getId()).orElseThrow(() -> new Exception("Department doesn't exist!"));
+        Role r = roleRepository.findById(memberDTO.getRole().getId()).orElseThrow(() -> new Exception("Role doesn't exist!"));
+        LocalDate date = LocalDate.now();
+        if(r.getName().equals("Head")){
+            Optional<Member> memberSH = memberRepository.findByRoleIdAndDepartmentId(r.getId(),dep.getId());
+            if (memberSH.isPresent()){
+                throw new Exception("The department already has a member with the specified role.");
             }
+            Member mH = memberRepository.save(memberConverter.toEntity(memberDTO));
+            headHistoryRepository.save(new HeadHistory(null, date,date.plusYears(1),mH,dep));
+            return memberConverter.toDto(mH);
+        } else if (r.getName().equals("Secretary")) {
+            Optional<Member> memberSH = memberRepository.findByRoleIdAndDepartmentId(r.getId(),dep.getId());
+            if (memberSH.isPresent()){
+                throw new Exception("The department already has a member with the specified role.");
+            }
+            Member mS = memberRepository.save(memberConverter.toEntity(memberDTO));
+            secretaryHistoryRepository.save(new SecretaryHistory(null,date,date.plusYears(1),mS,dep));
+            return memberConverter.toDto(mS);
         }
-        return memberDTO;
+        Member m = memberRepository.save(memberConverter.toEntity(memberDTO));
+        academicTitleHistoryRepository.save(new AcademicTitleHistory(null,date,date.plusYears(1),m,m.getAcademicTitle(),m.getScientificField()));
+        return memberConverter.toDto(m);
         //ako department ne postoji sacuvaj i department zajedno sa Subject/om
     }
 
@@ -79,9 +102,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO update(MemberDTO memberDTO, Long id) throws Exception {
-            Member member1 = memberConverter.toEntity(memberDTO);
-            member1 = memberRepository.save(member1);
-            return memberConverter.toDto(member1);
+        Optional<Member> mem = memberRepository.findById(id);
+        if(mem.isEmpty()){
+            throw new Exception("Member doesn't exist!");
+        }
+        memberDTO.setId(id);
+        save(memberDTO);
+        return memberDTO;
     }
 
     @Override
@@ -91,14 +118,7 @@ public class MemberServiceImpl implements MemberService {
             Member member1 = member.get();
             return memberConverter.toDto(member1);
         } else {
-            throw new Exception("Member title does not exist!");
-        }
-    }
-
-    private void validateMember(Member newMember,Department department) throws Exception {
-        if ((newMember.getAcademicTitle().getId().equals(7L) && department.getHead() != null)
-                || (newMember.getAcademicTitle().getId().equals(6L) && department.getSecretary() != null)) {
-            throw new Exception("The department already has a member with the specified academic title.");
+            throw new Exception("Member does not exist!");
         }
     }
 }

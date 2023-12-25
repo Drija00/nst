@@ -4,19 +4,21 @@ import jakarta.persistence.*;
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.Member;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
-public class HeadHistoryDTO {
+public class HeadHistoryDTO implements Serializable {
 
     Long id;
-    Date startDate;
-    Date endDate;
+    LocalDate startDate;
+    LocalDate endDate;
     MemberHeadSecDTO head;
     DepartmentDto department;
 
     public HeadHistoryDTO(){}
 
-    public HeadHistoryDTO(Long id, Date startDate, Date endDate, MemberHeadSecDTO head, DepartmentDto department) {
+    public HeadHistoryDTO(Long id, LocalDate startDate, LocalDate endDate, MemberHeadSecDTO head, DepartmentDto department) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -32,19 +34,19 @@ public class HeadHistoryDTO {
         this.id = id;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

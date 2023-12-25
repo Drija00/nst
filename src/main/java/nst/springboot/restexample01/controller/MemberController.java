@@ -19,12 +19,9 @@ import java.util.List;
 @RequestMapping("/member")
 public class MemberController {
     private MemberService memberService;
-    private ATHService athService;
-    Calendar calendar = Calendar.getInstance();
 
-    public MemberController(MemberService memberService, ATHService athService) {
+    public MemberController(MemberService memberService) {
         this.memberService = memberService;
-        this.athService = athService;
     }
 
     @PostMapping
@@ -36,15 +33,7 @@ public class MemberController {
 
     @PutMapping("/{id}")
     public ResponseEntity<MemberDTO> update(@Valid @RequestBody MemberDTO memberDTO, @RequestParam Long id) throws Exception {
-        //ResponseEntity
-        Long idA = memberService.findById(id).getAcademicTitle().getId();
         MemberDTO member = memberService.update(memberDTO, id);
-        if(!(memberDTO.getAcademicTitle().getId().equals(idA))) {
-            calendar.setTime(new Date());
-            Date now = calendar.getTime();
-            calendar.add(Calendar.YEAR, 1);
-            athService.save(new ATHDto(null,now,calendar.getTime(),member,memberDTO.getAcademicTitle(),member.getScientificField()));
-        }
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
 

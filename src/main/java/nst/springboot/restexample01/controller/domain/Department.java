@@ -37,15 +37,6 @@ public class Department {
     @Column(name = "shortname")
     private String shortname;
 
-    @OneToOne(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Member head;
-
-    @OneToOne(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Member secretary;
-    @JsonManagedReference
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private List<Member> otherMembers;
-
     public Department() {
     }
 
@@ -79,30 +70,6 @@ public class Department {
         this.shortname = shortname;
     }
 
-    public Member getHead() {
-        return head;
-    }
-
-    public void setHead(Member head) {
-        if(head.getAcademicTitle().getId().equals(7L))
-            this.head = head;
-    }
-
-    public Member getSecretary() {
-        return secretary;
-    }
-
-    public void setSecretary(Member secretary) {
-        this.secretary = secretary;
-    }
-
-    public List<Member> getOtherMembers() {
-        return otherMembers;
-    }
-
-    public void setOtherMembers(List<Member> otherMembers) {
-        this.otherMembers = otherMembers;
-    }
 
     @Override
     public String toString() {
@@ -113,7 +80,7 @@ public class Department {
                 '}';
     }
 
-    public void setAllMembers(){
+    /*public void setAllMembers(){
         head = null;
         secretary=null;
         for(Member m : otherMembers){
@@ -134,5 +101,5 @@ public class Department {
             otherMembers.add(member);
         }
         member.setDepartment(this);
-    }
+    }*/
 }

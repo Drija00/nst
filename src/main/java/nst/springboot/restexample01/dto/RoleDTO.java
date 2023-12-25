@@ -5,16 +5,16 @@ import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 
-public class EducationTitleDTO implements Serializable {
+public class RoleDTO implements Serializable {
     Long id;
 
     @NotNull
     @Size(min = 2, max = 20, message = "Broj znakova je od 2 do 20")
     String name;
 
-    public EducationTitleDTO(){}
+    public RoleDTO(){}
 
-    public EducationTitleDTO(Long id, String name) {
+    public RoleDTO(Long id, String name) {
         this.id = id;
         this.name = name;
     }

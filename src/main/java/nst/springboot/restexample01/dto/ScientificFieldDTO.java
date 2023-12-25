@@ -3,7 +3,9 @@ package nst.springboot.restexample01.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class ScientificFieldDTO {
+import java.io.Serializable;
+
+public class ScientificFieldDTO implements Serializable {
     Long id;
 
     @NotNull

@@ -18,6 +18,8 @@ public class MemberHeadSecConverter implements DtoEntityConverter<MemberHeadSecD
     private EducationTitleConverter educationTitleConverter;
     @Autowired
     private ScientificFieldConverter scientificFieldConverter;
+    @Autowired
+    private RoleConverter roleConverter;
 
     @Override
     public MemberHeadSecDTO toDto(Member entity) {
@@ -28,7 +30,8 @@ public class MemberHeadSecConverter implements DtoEntityConverter<MemberHeadSecD
                 academicTitleConverter.toDto(entity.getAcademicTitle()),
                 educationTitleConverter.toDto(entity.getEducationTitle()),
                 scientificFieldConverter.toDto(entity.getScientificField()),
-                entity.getDepartment().getId()
+                entity.getDepartment().getId(),
+                roleConverter.toDto(entity.getRole())
         );
     }
 
@@ -43,7 +46,8 @@ public class MemberHeadSecConverter implements DtoEntityConverter<MemberHeadSecD
                 academicTitleConverter.toEntity(dto.getAcademicTitle()),
                 educationTitleConverter.toEntity(dto.getEducationTitle()),
                 scientificFieldConverter.toEntity(dto.getScientificField()),
-                d
+                d,
+                roleConverter.toEntity(dto.getRoleDTO())
                 );
     }
 }

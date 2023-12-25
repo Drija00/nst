@@ -32,6 +32,10 @@
         <sqlFile path="ddl/create-scientific-field.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="create-role" author="andrija">
+        <sqlFile path="ddl/create-role.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
     <!-- popuni tabelu member-->
     <changeSet id="create-member" author="andrija">
         <sqlFile path="ddl/create-member.sql" relativeToChangelogFile="true"/>
@@ -65,6 +69,10 @@
         <sqlFile path="dml/init-scientific-field.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="init-role" author="andrija">
+        <sqlFile path="dml/init-role.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
     <changeSet id="init-member" author="andrija">
         <sqlFile path="dml/init-member.sql" relativeToChangelogFile="true"/>
     </changeSet>
@@ -73,13 +81,6 @@
         <sqlFile path="dml/init_ath.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
-    <!--<changeSet id="alter-department" author="andrija">
-        <sqlFile path="ddl/alter-department.sql" relativeToChangelogFile="true"/>
-    </changeSet>
-
-    <changeSet id="update-department" author="andrija">
-        <sqlFile path="dml/update-department.sql" relativeToChangelogFile="true"/>
-    </changeSet>-->
 
 
 </databaseChangeLog>

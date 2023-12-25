@@ -5,17 +5,19 @@ import nst.springboot.restexample01.controller.domain.AcademicTitle;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.domain.ScientificField;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
-public class ATHDto {
+public class ATHDto implements Serializable {
 
     Long id;
 
     MemberDTO member;
 
-    Date startDate;
+    LocalDate startDate;
 
-    Date endDate;
+    LocalDate endDate;
 
     AcademicTitleDTO academicTitle;
 
@@ -23,7 +25,7 @@ public class ATHDto {
 
     public ATHDto(){}
 
-    public ATHDto(Long id, Date startDate, Date endDate, MemberDTO member, AcademicTitleDTO academicTitle, ScientificFieldDTO scientificField) {
+    public ATHDto(Long id, LocalDate startDate, LocalDate endDate, MemberDTO member, AcademicTitleDTO academicTitle, ScientificFieldDTO scientificField) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -48,19 +50,19 @@ public class ATHDto {
         this.member = member;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

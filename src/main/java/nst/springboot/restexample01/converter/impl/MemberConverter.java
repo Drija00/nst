@@ -21,6 +21,8 @@ public class MemberConverter implements DtoEntityConverter<MemberDTO, Member> {
     private EducationTitleConverter educationTitleConverter;
     @Autowired
     private ScientificFieldConverter scientificFieldConverter;
+    @Autowired
+    private RoleConverter roleConverter;
 
     @Override
     public MemberDTO toDto(Member entity) {
@@ -31,7 +33,8 @@ public class MemberConverter implements DtoEntityConverter<MemberDTO, Member> {
                 academicTitleConverter.toDto(entity.getAcademicTitle()),
                 educationTitleConverter.toDto(entity.getEducationTitle()),
                 scientificFieldConverter.toDto(entity.getScientificField()),
-                departmentConverter.toDto(entity.getDepartment())
+                departmentConverter.toDto(entity.getDepartment()),
+                roleConverter.toDto(entity.getRole())
         );
     }
 
@@ -44,6 +47,7 @@ public class MemberConverter implements DtoEntityConverter<MemberDTO, Member> {
                 academicTitleConverter.toEntity(dto.getAcademicTitle()),
                 educationTitleConverter.toEntity(dto.getEducationTitle()),
                 scientificFieldConverter.toEntity(dto.getScientificField()),
-                departmentConverter.toEntity(dto.getDepartment()));
+                departmentConverter.toEntity(dto.getDepartment()),
+                roleConverter.toEntity(dto.getRole()));
     }
 }
