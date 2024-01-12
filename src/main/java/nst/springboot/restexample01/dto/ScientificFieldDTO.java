@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 
 public class ScientificFieldDTO implements Serializable {
+
     Long id;
 
     @NotNull

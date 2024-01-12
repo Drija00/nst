@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 
 public class EducationTitleDTO implements Serializable {
+
     Long id;
 
     @NotNull

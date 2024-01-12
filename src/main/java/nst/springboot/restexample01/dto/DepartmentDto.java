@@ -23,6 +23,7 @@ import java.util.List;
  * @author student2
  */
 public class DepartmentDto implements Serializable{
+
     private Long id;
     
     @NotNull

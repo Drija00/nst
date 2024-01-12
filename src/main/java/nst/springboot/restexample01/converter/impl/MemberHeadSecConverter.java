@@ -41,8 +41,6 @@ public class MemberHeadSecConverter implements DtoEntityConverter<MemberHeadSecD
     public Member toEntity(MemberHeadSecDTO dto) {
         Department d = new Department();
         d.setId(dto.getDepartment());
-        Role r = new Role();
-        r.setId(3L);
         return new Member(
                 dto.getId(),
                 dto.getFirstname(),
@@ -51,7 +49,7 @@ public class MemberHeadSecConverter implements DtoEntityConverter<MemberHeadSecD
                 educationTitleConverter.toEntity(dto.getEducationTitle()),
                 scientificFieldConverter.toEntity(dto.getScientificField()),
                 d,
-                r
+                roleConverter.toEntity(dto.getRoleDTO())
                 );
     }
 }

@@ -4,6 +4,8 @@
  */
 package nst.springboot.restexample01.dto;
 
+import jakarta.validation.constraints.Size;
+
 import java.io.Serializable;
 
 /**
@@ -12,6 +14,7 @@ import java.io.Serializable;
  */
 
 public class SubjectDto implements Serializable {
+
     private Long id;
     private String name;
     private int esbp;

@@ -1,6 +1,7 @@
 package nst.springboot.restexample01.dto;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.Member;
 

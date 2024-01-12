@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 
 public class MemberHeadSecDTO implements Serializable {
+
     Long id;
     @NotNull
     @Size(min = 2, max = 20, message = "Broj znakova je od 2 do 20")
@@ -15,12 +16,13 @@ public class MemberHeadSecDTO implements Serializable {
     @Size(min = 2, max = 20, message = "Broj znakova je od 2 do 20")
     String lastname;
 
+    @NotNull
     AcademicTitleDTO academicTitle;
-
+    @NotNull
     EducationTitleDTO educationTitle;
-
+    @NotNull
     ScientificFieldDTO scientificField;
-
+    @NotNull
     Long department;
     @JsonIgnore
     RoleDTO roleDTO;

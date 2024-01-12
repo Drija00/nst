@@ -13,11 +13,11 @@ public class ATHDto implements Serializable {
 
     Long id;
 
-    MemberDTO member;
-
     LocalDate startDate;
 
     LocalDate endDate;
+
+    MemberDTO member;
 
     AcademicTitleDTO academicTitle;
 
@@ -86,9 +86,9 @@ public class ATHDto implements Serializable {
     public String toString() {
         return "ATHDto{" +
                 "id=" + id +
-                ", member=" + member +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", member=" + member +
                 ", academicTitle=" + academicTitle +
                 ", scientificField=" + scientificField +
                 '}';
