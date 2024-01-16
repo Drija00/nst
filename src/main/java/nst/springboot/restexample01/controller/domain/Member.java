@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,18 +24,22 @@ public class Member {
     @Column(name = "lastname")
     String lastname;
 
+    @NotNull(message = "Academic title je obavezno polje")
     @ManyToOne
     @JoinColumn(name = "academic_title_id")
     AcademicTitle academicTitle;
 
+    @NotNull(message = "Education title je obavezno polje")
     @ManyToOne
     @JoinColumn(name = "education_title_id")
     EducationTitle educationTitle;
 
+    @NotNull(message = "Scientific field je obavezno polje")
     @ManyToOne
     @JoinColumn(name = "scientific_field_id")
     ScientificField scientificField;
-    @JsonBackReference
+
+    @NotNull(message = "Department je obavezno polje")
     @ManyToOne
     @JoinColumn(name = "department_id")
     Department department;

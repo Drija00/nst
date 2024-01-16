@@ -12,6 +12,7 @@ import nst.springboot.restexample01.dto.RoleDTO;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class MemberServiceImpl implements MemberService {
 
     private MemberConverter memberConverter;
@@ -117,7 +119,6 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO setSec(Long idM) throws Exception {
         Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
-        LocalDate date = LocalDate.now();
         Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),2L);
         if(memberSH.isPresent()){
             throw  new Exception("The department already has a secretary member.");

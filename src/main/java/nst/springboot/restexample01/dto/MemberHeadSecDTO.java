@@ -1,6 +1,7 @@
 package nst.springboot.restexample01.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -9,13 +10,12 @@ import java.io.Serializable;
 public class MemberHeadSecDTO implements Serializable {
 
     Long id;
-    @NotNull
+    @NotEmpty
     @Size(min = 2, max = 20, message = "Broj znakova je od 2 do 20")
     String firstname;
-    @NotNull
+    @NotEmpty
     @Size(min = 2, max = 20, message = "Broj znakova je od 2 do 20")
     String lastname;
-
     @NotNull
     AcademicTitleDTO academicTitle;
     @NotNull
