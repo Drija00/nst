@@ -154,7 +154,7 @@ public class MemberServiceImpl implements MemberService {
         if(mem.getRole().getId().equals(1L)) {
             mem.setRole(new Role(3L, null));
             Member mH = memberRepository.save(mem);
-            List<HeadHistory> history = headHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByStartDateDesc(mem.getId(), mem.getDepartment().getId());
+            List<HeadHistory> history = headHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByEndDateAsc(mem.getId(), mem.getDepartment().getId());
             ;
             if (!history.isEmpty()) {
                 history.get(0).setEndDate(LocalDate.now());
@@ -172,7 +172,7 @@ public class MemberServiceImpl implements MemberService {
         if(mem.getRole().getId().equals(2L)) {
         mem.setRole(new Role(3L,null));
         Member mH = memberRepository.save(mem);
-        List<SecretaryHistory> history = secretaryHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByStartDateDesc(mem.getId(),mem.getDepartment().getId());;
+        List<SecretaryHistory> history = secretaryHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByEndDateAsc(mem.getId(),mem.getDepartment().getId());;
         if(!history.isEmpty()) {
             history.get(0).setEndDate(LocalDate.now());
             secretaryHistoryRepository.save(history.get(0));

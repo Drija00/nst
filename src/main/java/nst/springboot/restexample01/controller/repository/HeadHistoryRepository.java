@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface HeadHistoryRepository extends JpaRepository<HeadHistory, Long> {
     Optional<HeadHistory> findByDepartmentIdAndEndDateNull(Long id);
 
-    List<HeadHistory> findAllByMemberIdAndDepartmentIdOrderByStartDateDesc(Long idM, Long idD);
+    List<HeadHistory> findAllByMemberIdAndDepartmentIdOrderByEndDateAsc(Long idM, Long idD);
 }

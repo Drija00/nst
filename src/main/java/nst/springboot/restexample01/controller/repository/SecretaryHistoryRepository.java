@@ -10,5 +10,5 @@ import java.util.Optional;
 
 public interface SecretaryHistoryRepository extends JpaRepository<SecretaryHistory,Long> {
     Optional<SecretaryHistory> findByDepartmentIdAndEndDateNull(Long id);
-    List<SecretaryHistory> findAllByMemberIdAndDepartmentIdOrderByStartDateDesc(Long idM, Long idD);;
+    List<SecretaryHistory> findAllByMemberIdAndDepartmentIdOrderByEndDateAsc(Long idM, Long idD);;
 }
