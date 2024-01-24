@@ -1,7 +1,9 @@
 package nst.springboot.restexample01.controller.service.impl;
 
 import nst.springboot.restexample01.controller.domain.HeadHistory;
+import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.domain.SecretaryHistory;
+import nst.springboot.restexample01.controller.repository.MemberRepository;
 import nst.springboot.restexample01.controller.repository.SecretaryHistoryRepository;
 import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
 import nst.springboot.restexample01.converter.impl.SecretaryHistoryConverter;
@@ -20,9 +22,12 @@ public class SecretaryHistoryServiceImpl implements SecretaryHistoryService {
 
     private SecretaryHistoryConverter secretaryHistoryConverter;
 
-    public SecretaryHistoryServiceImpl(SecretaryHistoryRepository repository, SecretaryHistoryConverter secretaryHistoryConverter) {
+    private MemberRepository memberRepository;
+
+    public SecretaryHistoryServiceImpl(MemberRepository memberRepository,SecretaryHistoryRepository repository, SecretaryHistoryConverter secretaryHistoryConverter) {
         this.repository = repository;
         this.secretaryHistoryConverter = secretaryHistoryConverter;
+        this.memberRepository = memberRepository;
     }
 
 
@@ -41,12 +46,10 @@ public class SecretaryHistoryServiceImpl implements SecretaryHistoryService {
                 .collect(Collectors.toList());
     }
     @Override
-    public SecretaryHistoryDTO getByDepartmentId(Long id) throws Exception {
-        Optional<SecretaryHistory> secretaryHistory = repository.findByDepartmentIdAndEndDateNull(id);
-        if(secretaryHistory.isEmpty()){
-            throw new Exception("Department doesn't have active secretary member");
-        }
-        return secretaryHistoryConverter.toDto(secretaryHistory.get());
+    public SecretaryHistoryDTO getByMemberIdAndDepartmentId(Long idD) throws Exception {
+        Member member = memberRepository.findByDepartmentIdAndRoleId(idD,2L).orElseThrow(() -> new Exception("Department doesn't have active secretary!"));
+        List<SecretaryHistory> secretaryHistories = repository.findAllByMemberIdAndDepartmentIdOrderByEndDateDesc(member.getId(), idD);
+        return secretaryHistoryConverter.toDto(secretaryHistories.get(0));
     }
 
     @Override

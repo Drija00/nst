@@ -11,7 +11,7 @@ import java.util.List;
 public interface SecretaryHistoryService {
     SecretaryHistoryDTO save(SecretaryHistoryDTO secretaryHistoryDTO)throws Exception;
     List<SecretaryHistoryDTO> getAll();
-    SecretaryHistoryDTO getByDepartmentId(Long id) throws Exception;
+    SecretaryHistoryDTO getByMemberIdAndDepartmentId(Long idD) throws Exception;
     void delete(Long id) throws Exception;
     void update(SecretaryHistoryDTO secretaryHistoryDTO)throws Exception;
     SecretaryHistoryDTO findById(Long id)throws Exception;

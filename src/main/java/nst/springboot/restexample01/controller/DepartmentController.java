@@ -7,6 +7,7 @@ package nst.springboot.restexample01.controller;
 import jakarta.validation.Valid;
 import java.util.List;
 import nst.springboot.restexample01.controller.domain.Department;
+import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.repository.SecretaryHistoryRepository;
 import nst.springboot.restexample01.controller.service.DepartmentService;
 import nst.springboot.restexample01.controller.service.HeadHistoryService;
@@ -87,20 +88,18 @@ public class DepartmentController {
         System.out.println("Controller: " + id);
         return departmentService.findById(id);
     }
-    @GetMapping("/dep-mem/{id}")
+    @GetMapping("/{id}/members")
     public List<MemberDTO> findMembers(@PathVariable("id") Long id) throws Exception {
         System.out.println("Controller: " + id);
         return memberService.getAllByDepartmentId(id);
     }
-    @GetMapping("/dep-head/{id}")
-    public HeadHistoryDTO findHeadHistories(@PathVariable("id") Long id) throws Exception {
-        System.out.println("Controller: " + id);
-        return headHistoryService.getByDepartmentId(id);
+    @GetMapping("/{id}/head")
+    public HeadHistoryDTO findHeadHistories(@PathVariable("id") Long idDepartment) throws Exception {
+        return headHistoryService.getByMemberIdAndDepartmentId(idDepartment);
     }
-    @GetMapping("/dep-sec/{id}")
-    public SecretaryHistoryDTO findSecretaryHistories(@PathVariable("id") Long id) throws Exception {
-        System.out.println("Controller: " + id);
-        return secretaryHistoryService.getByDepartmentId(id);
+    @GetMapping("/{id}/secretary")
+    public SecretaryHistoryDTO findSecretaryHistories(@PathVariable("id") Long idDepartment) throws Exception {
+        return secretaryHistoryService.getByMemberIdAndDepartmentId(idDepartment);
     }
 
     //pronadji na osnovu ID/a

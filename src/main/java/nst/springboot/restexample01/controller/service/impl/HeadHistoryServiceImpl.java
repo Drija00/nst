@@ -5,6 +5,7 @@ import nst.springboot.restexample01.controller.domain.AcademicTitleHistory;
 import nst.springboot.restexample01.controller.domain.HeadHistory;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.repository.HeadHistoryRepository;
+import nst.springboot.restexample01.controller.repository.MemberRepository;
 import nst.springboot.restexample01.controller.service.HeadHistoryService;
 import nst.springboot.restexample01.converter.impl.HeadHistoryConverter;
 import nst.springboot.restexample01.converter.impl.MemberHeadSecConverter;
@@ -23,10 +24,12 @@ public class HeadHistoryServiceImpl implements HeadHistoryService {
     private HeadHistoryRepository repository;
 
     private HeadHistoryConverter headHistoryConverter;
+    private MemberRepository memberRepository;
 
-    public HeadHistoryServiceImpl(HeadHistoryRepository repository, HeadHistoryConverter headHistoryConverter) {
+    public HeadHistoryServiceImpl(HeadHistoryRepository repository, HeadHistoryConverter headHistoryConverter, MemberRepository memberRepository) {
         this.repository = repository;
         this.headHistoryConverter = headHistoryConverter;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -44,12 +47,10 @@ public class HeadHistoryServiceImpl implements HeadHistoryService {
                 .collect(Collectors.toList());
     }
     @Override
-    public HeadHistoryDTO getByDepartmentId(Long id) throws Exception {
-        Optional<HeadHistory> headHistory = repository.findByDepartmentIdAndEndDateNull(id);
-        if(headHistory.isEmpty()){
-            throw new Exception("Department doesn't have active head member");
-        }
-        return headHistoryConverter.toDto(headHistory.get());
+    public HeadHistoryDTO getByMemberIdAndDepartmentId(Long idD) throws Exception {
+        Member member = memberRepository.findByDepartmentIdAndRoleId(idD,1L).orElseThrow(() -> new Exception("Department doesn't have active head!"));
+        List<HeadHistory> headHistories = repository.findAllByMemberIdAndDepartmentIdOrderByEndDateDesc(member.getId(),idD);
+        return headHistoryConverter.toDto(headHistories.get(0));
     }
 
     @Override

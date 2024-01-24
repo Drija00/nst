@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ath")
+@RequestMapping("/academic_title_history")
 public class ATHController {
 
     private ATHService athService;
@@ -53,7 +53,7 @@ public class ATHController {
         return athService.findById(id);
     }
 
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
         /*
         try {
@@ -61,10 +61,10 @@ public class ATHController {
             return new ResponseEntity<>("Department removed!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(">>" + e.getMessage(), HttpStatus.NOT_FOUND);
-        }*/
+        }
 
         athService.delete(id);
         return new ResponseEntity<>("Academic title history removed!", HttpStatus.OK);
 
-    }
+    }*/
 }

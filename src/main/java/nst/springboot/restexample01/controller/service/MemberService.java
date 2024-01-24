@@ -1,8 +1,8 @@
 package nst.springboot.restexample01.controller.service;
 
-import nst.springboot.restexample01.dto.MemberDTO;
-import nst.springboot.restexample01.dto.MemberHeadSecDTO;
+import nst.springboot.restexample01.dto.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface MemberService {
@@ -11,9 +11,10 @@ public interface MemberService {
     List<MemberDTO> getAll();
     List<MemberDTO> getAllByDepartmentId(Long id);
     void delete(Long id) throws Exception;
-    MemberDTO setSec(Long idM)throws Exception;
-    MemberDTO setHead(Long idM)throws Exception;
+    MemberDTO setSec(Long idM, DatesDTO datesDTO)throws Exception;
+    MemberDTO setHead(Long idM, DatesDTO datesDTO)throws Exception;
     MemberDTO removeHead(Long idM)throws Exception;
     MemberDTO removeSec(Long idM)throws Exception;
     MemberDTO findById(Long id)throws Exception;
+    MemberHistoriesDTO findAllHistories(Long id) throws Exception;
 }

@@ -22,12 +22,12 @@ public class HeadHistoryController {
         this.service = service;
     }
 
-    @PostMapping
+    /*@PostMapping
     public ResponseEntity<HeadHistoryDTO> save(@Valid @RequestBody HeadHistoryDTO headHistory) throws Exception {
         //ResponseEntity
         HeadHistoryDTO history = service.save(headHistory);
         return new ResponseEntity<>(history, HttpStatus.CREATED);
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<List<HeadHistoryDTO>> getAll() {
@@ -52,7 +52,7 @@ public class HeadHistoryController {
         return service.findById(id);
     }
 
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
         /*
         try {
@@ -60,10 +60,10 @@ public class HeadHistoryController {
             return new ResponseEntity<>("Department removed!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(">>" + e.getMessage(), HttpStatus.NOT_FOUND);
-        }*/
+        }
 
         service.delete(id);
         return new ResponseEntity<>("Head history removed!", HttpStatus.OK);
 
-    }
+    }*/
 }

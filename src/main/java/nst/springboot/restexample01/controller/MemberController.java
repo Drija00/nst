@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -36,25 +37,25 @@ public class MemberController {
         return new ResponseEntity<>(member, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/set-sec")
-    public ResponseEntity<MemberDTO> setSec(@RequestParam Long idMember) throws Exception {
-        MemberDTO member = memberService.setSec(idMember);
+    @PatchMapping("/{id}/secretary/set")
+    public ResponseEntity<MemberDTO> setSec(@PathVariable Long id, @RequestBody DatesDTO datesDTO) throws Exception {
+        MemberDTO member = memberService.setSec(id, datesDTO);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
-    @PatchMapping("/set-head")
-    public ResponseEntity<MemberDTO> setHead(@RequestParam Long idMember) throws Exception {
-        MemberDTO member = memberService.setHead(idMember);
+    @PatchMapping("/{id}/head/set")
+    public ResponseEntity<MemberDTO> setHead(@PathVariable Long id, @RequestBody DatesDTO datesDTO) throws Exception {
+        MemberDTO member = memberService.setHead(id, datesDTO);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
-    @PatchMapping("/remove-head")
-    public ResponseEntity<MemberDTO> removeHead(@RequestParam Long idMember) throws Exception {
-        MemberDTO member = memberService.removeHead(idMember);
+    @PatchMapping("/{id}/head/remove")
+    public ResponseEntity<MemberDTO> removeHead(@PathVariable Long id) throws Exception {
+        MemberDTO member = memberService.removeHead(id);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
-    @PatchMapping("/remove-sec")
-    public ResponseEntity<MemberDTO> removeSec(@RequestParam Long idMember) throws Exception {
-        MemberDTO member = memberService.removeSec(idMember);
+    @PatchMapping("/{id}/secretary/remove")
+    public ResponseEntity<MemberDTO> removeSec(@PathVariable Long id) throws Exception {
+        MemberDTO member = memberService.removeSec(id);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
@@ -62,6 +63,12 @@ public class MemberController {
     public ResponseEntity<List<MemberDTO>> getAll() {
         List<MemberDTO> members = memberService.getAll();
         return new ResponseEntity<>(members, HttpStatus.OK);
+    }
+
+    @GetMapping("/{memberId}/histories")
+    public ResponseEntity<MemberHistoriesDTO> getAllMemberHistories(@PathVariable Long memberId) throws Exception {
+        MemberHistoriesDTO hietories = memberService.findAllHistories(memberId);
+        return new ResponseEntity<>(hietories, HttpStatus.OK);
     }
 
     //pronadji na osnovu ID/a

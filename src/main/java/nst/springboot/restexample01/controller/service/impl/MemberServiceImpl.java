@@ -5,10 +5,7 @@ import nst.springboot.restexample01.controller.repository.*;
 import nst.springboot.restexample01.controller.service.MemberService;
 import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
 import nst.springboot.restexample01.converter.impl.*;
-import nst.springboot.restexample01.dto.ATHDto;
-import nst.springboot.restexample01.dto.MemberDTO;
-import nst.springboot.restexample01.dto.MemberHeadSecDTO;
-import nst.springboot.restexample01.dto.RoleDTO;
+import nst.springboot.restexample01.dto.*;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.stereotype.Service;
@@ -39,10 +36,13 @@ public class MemberServiceImpl implements MemberService {
     private HeadHistoryRepository headHistoryRepository;
 
     private SecretaryHistoryRepository secretaryHistoryRepository;
+    private SecretaryHistoryConverter secretaryHistoryConverter;
+    private HeadHistoryConverter headHistoryConverter;
     private RoleRepository roleRepository;
     private RoleConverter roleConverter;
+    private ATHConverter athConverter;
 
-    public MemberServiceImpl(MemberConverter memberConverter, MemberHeadSecConverter memberHeadSecConverter, MemberRepository memberRepository, DepartmentRepository departmentRepository, AcademicTitleRepository academicTitleRepository, AcademicTitleHistoryRepository academicTitleHistoryRepository, HeadHistoryRepository headHistoryRepository, SecretaryHistoryRepository secretaryHistoryRepository, RoleRepository roleRepository, RoleConverter roleConverter) {
+    public MemberServiceImpl(MemberConverter memberConverter,ATHConverter athConverter,HeadHistoryConverter headHistoryConverter, SecretaryHistoryConverter secretaryHistoryConverter, MemberHeadSecConverter memberHeadSecConverter, MemberRepository memberRepository, DepartmentRepository departmentRepository, AcademicTitleRepository academicTitleRepository, AcademicTitleHistoryRepository academicTitleHistoryRepository, HeadHistoryRepository headHistoryRepository, SecretaryHistoryRepository secretaryHistoryRepository, RoleRepository roleRepository, RoleConverter roleConverter) {
         this.memberConverter = memberConverter;
         this.memberHeadSecConverter = memberHeadSecConverter;
         this.memberRepository = memberRepository;
@@ -53,6 +53,9 @@ public class MemberServiceImpl implements MemberService {
         this.secretaryHistoryRepository = secretaryHistoryRepository;
         this.roleRepository = roleRepository;
         this.roleConverter = roleConverter;
+        this.secretaryHistoryConverter = secretaryHistoryConverter;
+        this.headHistoryConverter = headHistoryConverter;
+        this.athConverter = athConverter;
     }
 
     @Override
@@ -117,34 +120,48 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO setSec(Long idM) throws Exception {
+    public MemberDTO setSec(Long idM, DatesDTO datesDTO) throws Exception {
         Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
         Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),2L);
         if(memberSH.isPresent()){
-            throw  new Exception("The department already has a secretary member.");
+            throw  new Exception("The department already has a secretary member. Member with id: "+
+                    memberSH.get().getId()+
+                    " is active secretary for department with id: "+
+                    memberSH.get().getDepartment().getId()+ " !");
+        }
+        if(datesDTO.getStartDate()==null || datesDTO.getEndDate()==null || datesDTO.getStartDate().isAfter(datesDTO.getEndDate()))
+        {
+            throw new Exception("The startdate and enddate are required parameters and startdate must be before enddate!");
         }
         if(mem.getRole().getId().equals(1L)){
-            removeHead(idM);
+            throw new Exception("This member is already a head member for the department he is part of Department with id: " +mem.getDepartment().getId() + " and cannot be selected as secretary!");
         }
         mem.setRole(new Role(2L,null));
         Member mH = memberRepository.save(mem);
-        secretaryHistoryRepository.save(new SecretaryHistory(null, LocalDate.now(),null,mH,mem.getDepartment()));
+        secretaryHistoryRepository.save(new SecretaryHistory(null,datesDTO.getStartDate(),datesDTO.getEndDate(),mH,mH.getDepartment()));
         return memberConverter.toDto(mH);
     }
 
     @Override
-    public MemberDTO setHead(Long idM) throws Exception {
+    public MemberDTO setHead(Long idM, DatesDTO datesDTO) throws Exception {
         Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
         Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),1L);
         if(memberSH.isPresent()){
-            throw  new Exception("The department already has a head member.");
+            throw  new Exception("The department already has a head member. Member with id: "+
+                    memberSH.get().getId()+
+                    " is active head for department with id: "+
+                    memberSH.get().getDepartment().getId()+ " !");
+        }
+        if(datesDTO.getStartDate()==null || datesDTO.getEndDate()==null || datesDTO.getStartDate().isAfter(datesDTO.getEndDate()))
+        {
+            throw new Exception("The startdate and enddate are required parameters and startdate must be before enddate!");
         }
         if(mem.getRole().getId().equals(2L)){
-            removeSec(idM);
+            throw new Exception("This member is already a secretary member for the department he is part of Department with id: " +mem.getDepartment().getId() + " and cannot be selected as head!");
         }
         mem.setRole(new Role(1L,null));
         Member mH = memberRepository.save(mem);
-        headHistoryRepository.save(new HeadHistory(null, LocalDate.now(),null,mH,mem.getDepartment()));
+        headHistoryRepository.save(new HeadHistory(null,datesDTO.getStartDate(),datesDTO.getEndDate(),mH,mH.getDepartment()));
         return memberConverter.toDto(mH);
     }
 
@@ -154,7 +171,7 @@ public class MemberServiceImpl implements MemberService {
         if(mem.getRole().getId().equals(1L)) {
             mem.setRole(new Role(3L, null));
             Member mH = memberRepository.save(mem);
-            List<HeadHistory> history = headHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByEndDateAsc(mem.getId(), mem.getDepartment().getId());
+            List<HeadHistory> history = headHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByEndDateDesc(mem.getId(), mem.getDepartment().getId());
             ;
             if (!history.isEmpty()) {
                 history.get(0).setEndDate(LocalDate.now());
@@ -172,7 +189,7 @@ public class MemberServiceImpl implements MemberService {
         if(mem.getRole().getId().equals(2L)) {
         mem.setRole(new Role(3L,null));
         Member mH = memberRepository.save(mem);
-        List<SecretaryHistory> history = secretaryHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByEndDateAsc(mem.getId(),mem.getDepartment().getId());;
+        List<SecretaryHistory> history = secretaryHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByEndDateDesc(mem.getId(),mem.getDepartment().getId());;
         if(!history.isEmpty()) {
             history.get(0).setEndDate(LocalDate.now());
             secretaryHistoryRepository.save(history.get(0));
@@ -192,5 +209,20 @@ public class MemberServiceImpl implements MemberService {
         } else {
             throw new Exception("Member does not exist!");
         }
+    }
+
+    @Override
+    public MemberHistoriesDTO findAllHistories(Long id) throws Exception {
+    List<ATHDto> athDtos = academicTitleHistoryRepository.findAllByMemberId(id)
+                .stream().map(entity -> athConverter.toDto(entity))
+                .toList();
+    List<HeadHistoryDTO> headHistoryDTOS = headHistoryRepository.findAllByMemberId(id)
+            .stream().map(entity -> headHistoryConverter.toDto(entity))
+            .toList();
+    List<SecretaryHistoryDTO> secretaryHistoryDTOS = secretaryHistoryRepository.findAllByMemberId(id)
+            .stream().map(entity -> secretaryHistoryConverter.toDto(entity))
+            .toList();
+
+    return new MemberHistoriesDTO(athDtos,secretaryHistoryDTOS, headHistoryDTOS);
     }
 }

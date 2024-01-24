@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface AcademicTitleHistoryRepository extends JpaRepository<AcademicTitleHistory,Long> {
     List<AcademicTitleHistory> findAllByMemberIdAndAcademicTitleIdOrderByStartDateDesc(Long idM, Long idAT);
+    List<AcademicTitleHistory> findAllByMemberId(Long id);
 }
