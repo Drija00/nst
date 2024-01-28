@@ -37,27 +37,27 @@ public class MemberController {
         return new ResponseEntity<>(member, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{id}/secretary/set")
-    public ResponseEntity<MemberDTO> setSec(@PathVariable Long id, @RequestBody DatesDTO datesDTO) throws Exception {
-        MemberDTO member = memberService.setSec(id, datesDTO);
+    @PatchMapping("/{id}/to-secretary-role")
+    public ResponseEntity<MemberDTO> secRole(@PathVariable Long id, @RequestBody DatesDTO datesDTO) throws Exception {
+        MemberDTO member = memberService.secRole(id, datesDTO);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}/head/set")
-    public ResponseEntity<MemberDTO> setHead(@PathVariable Long id, @RequestBody DatesDTO datesDTO) throws Exception {
-        MemberDTO member = memberService.setHead(id, datesDTO);
+    @PatchMapping("/{id}/to-head-role")
+    public ResponseEntity<MemberDTO> headRole(@PathVariable Long id, @RequestBody DatesDTO datesDTO) throws Exception {
+        MemberDTO member = memberService.headRole(id, datesDTO);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
-    @PatchMapping("/{id}/head/remove")
-    public ResponseEntity<MemberDTO> removeHead(@PathVariable Long id) throws Exception {
-        MemberDTO member = memberService.removeHead(id);
+    @PatchMapping("/{id}/to-regular-role")
+    public ResponseEntity<MemberDTO> regularRole(@PathVariable Long id) throws Exception {
+        MemberDTO member = memberService.regularRole(id);
         return new ResponseEntity<>(member, HttpStatus.OK);
     }
-    @PatchMapping("/{id}/secretary/remove")
+    /*@PatchMapping("/{id}/secretary/remove")
     public ResponseEntity<MemberDTO> removeSec(@PathVariable Long id) throws Exception {
         MemberDTO member = memberService.removeSec(id);
         return new ResponseEntity<>(member, HttpStatus.OK);
-    }
+    }*/
 
     @GetMapping
     public ResponseEntity<List<MemberDTO>> getAll() {

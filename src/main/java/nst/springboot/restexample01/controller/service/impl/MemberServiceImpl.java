@@ -76,10 +76,8 @@ public class MemberServiceImpl implements MemberService {
             memberDTO.setRoleDTO(roleConverter.toDto(member.getRole()));
         }else {
             memberDTO.setRoleDTO(new RoleDTO(3L,null));
-            if(member.getRole().getId().equals(2L)){
-                removeSec(member.getId());
-            } else if (member.getRole().getId().equals(1L)) {
-                removeHead(member.getId());
+            if(member.getRole().getId().equals(2L) || member.getRole().getId().equals(3L)){
+                regularRole(member.getId());
             }
         }
         Long atId = member.getAcademicTitle().getId();
@@ -120,7 +118,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO setSec(Long idM, DatesDTO datesDTO) throws Exception {
+    public MemberDTO secRole(Long idM, DatesDTO datesDTO) throws Exception {
         Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
         Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),2L);
         if(memberSH.isPresent()){
@@ -143,7 +141,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO setHead(Long idM, DatesDTO datesDTO) throws Exception {
+    public MemberDTO headRole(Long idM, DatesDTO datesDTO) throws Exception {
         Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
         Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),1L);
         if(memberSH.isPresent()){
@@ -166,7 +164,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDTO removeHead(Long idM) throws Exception {
+    public MemberDTO regularRole(Long idM) throws Exception {
         Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
         if(mem.getRole().getId().equals(1L)) {
             mem.setRole(new Role(3L, null));
@@ -178,12 +176,21 @@ public class MemberServiceImpl implements MemberService {
                 headHistoryRepository.save(history.get(0));
             }
             return memberConverter.toDto(mH);
-        }else {
-            throw new Exception("Member doesn't have Head role.");
+        }else if(mem.getRole().getId().equals(2L)) {
+            mem.setRole(new Role(3L,null));
+            Member mH = memberRepository.save(mem);
+            List<SecretaryHistory> history = secretaryHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByEndDateDesc(mem.getId(),mem.getDepartment().getId());;
+            if(!history.isEmpty()) {
+                history.get(0).setEndDate(LocalDate.now());
+                secretaryHistoryRepository.save(history.get(0));
+            }
+            return memberConverter.toDto(mH);
+        } else {
+            throw new Exception("Member doesn't have "+ mem.getRole().getName() +" role.");
         }
     }
 
-    @Override
+   /* @Override
     public MemberDTO removeSec(Long idM) throws Exception {
         Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
         if(mem.getRole().getId().equals(2L)) {
@@ -198,7 +205,7 @@ public class MemberServiceImpl implements MemberService {
         }else {
             throw new Exception("Member doesn't have Secretary role.");
         }
-    }
+    }*/
 
     @Override
     public MemberDTO findById(Long id) throws Exception {
@@ -213,6 +220,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberHistoriesDTO findAllHistories(Long id) throws Exception {
+        memberRepository.findById(id).orElseThrow(() -> new Exception("Member doesn't exist!"));
     List<ATHDto> athDtos = academicTitleHistoryRepository.findAllByMemberId(id)
                 .stream().map(entity -> athConverter.toDto(entity))
                 .toList();
