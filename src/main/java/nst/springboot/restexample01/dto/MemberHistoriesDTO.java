@@ -6,37 +6,46 @@ import nst.springboot.restexample01.controller.domain.SecretaryHistory;
 import java.util.List;
 
 public class MemberHistoriesDTO {
-    List<ATHDto> athDtos;
-    List<SecretaryHistoryDTO> secretaryHistoryDTOS;
-    List<HeadHistoryDTO> headHistoryDTOS;
+    List<ATHDto> academicTitleHistories;
+    List<SecretaryHistoryDTO> secretaryHistories;
+    List<HeadHistoryDTO> headHistories;
 
-    public MemberHistoriesDTO(List<ATHDto> athDtos, List<SecretaryHistoryDTO> secretaryHistoryDTOS, List<HeadHistoryDTO> headHistoryDTOS) {
-        this.athDtos = athDtos;
-        this.secretaryHistoryDTOS = secretaryHistoryDTOS;
-        this.headHistoryDTOS = headHistoryDTOS;
+    public MemberHistoriesDTO(List<ATHDto> academicTitleHistories, List<SecretaryHistoryDTO> secretaryHistories, List<HeadHistoryDTO> headHistories) {
+        this.academicTitleHistories = academicTitleHistories;
+        this.secretaryHistories = secretaryHistories;
+        this.headHistories = headHistories;
     }
 
-    public List<ATHDto> getAthDtos() {
-        return athDtos;
+    public List<ATHDto> getAcademicTitleHistories() {
+        return academicTitleHistories;
     }
 
-    public void setAthDtos(List<ATHDto> athDtos) {
-        this.athDtos = athDtos;
+    public void setAcademicTitleHistories(List<ATHDto> academicTitleHistories) {
+        this.academicTitleHistories = academicTitleHistories;
     }
 
-    public List<SecretaryHistoryDTO> getSecretaryHistoryDTOS() {
-        return secretaryHistoryDTOS;
+    public List<SecretaryHistoryDTO> getSecretaryHistories() {
+        return secretaryHistories;
     }
 
-    public void setSecretaryHistoryDTOS(List<SecretaryHistoryDTO> secretaryHistoryDTOS) {
-        this.secretaryHistoryDTOS = secretaryHistoryDTOS;
+    public void setSecretaryHistories(List<SecretaryHistoryDTO> secretaryHistories) {
+        this.secretaryHistories = secretaryHistories;
     }
 
-    public List<HeadHistoryDTO> getHeadHistoryDTOS() {
-        return headHistoryDTOS;
+    public List<HeadHistoryDTO> getHeadHistories() {
+        return headHistories;
     }
 
-    public void setHeadHistoryDTOS(List<HeadHistoryDTO> headHistoryDTOS) {
-        this.headHistoryDTOS = headHistoryDTOS;
+    public void setHeadHistories(List<HeadHistoryDTO> headHistories) {
+        this.headHistories = headHistories;
+    }
+
+    @Override
+    public String toString() {
+        return "MemberHistoriesDTO{" +
+                "academicTitleHistories =" + academicTitleHistories +
+                ", secretaryHistories =" + secretaryHistories +
+                ", headHistories =" + headHistories +
+                '}';
     }
 }

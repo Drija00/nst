@@ -11,11 +11,6 @@
     <changeSet id="create-subject" author="andrija">
         <sqlFile path="ddl/create-subject.sql" relativeToChangelogFile="true"/>
     </changeSet>
-    
-    <!-- popuni tabelu depratment-->
-    <changeSet id="init-department" author="andrija">
-        <sqlFile path="dml/init-department.sql" relativeToChangelogFile="true"/>
-    </changeSet>
 
     <!-- popuni tabelu academic title-->
     <changeSet id="create-academic-title" author="andrija">
@@ -51,6 +46,19 @@
 
     <changeSet id="create-secretary-history" author="andrija">
         <sqlFile path="ddl/create-secretary-history.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="create-active-head" author="andrija">
+        <sqlFile path="ddl/create-active-head.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="create-active-secretary" author="andrija">
+        <sqlFile path="ddl/create-active-secretary.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <!-- popuni tabelu depratment-->
+    <changeSet id="init-department" author="andrija">
+        <sqlFile path="dml/init-department.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="init-subject" author="andrija">

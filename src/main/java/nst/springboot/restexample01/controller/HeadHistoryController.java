@@ -47,20 +47,12 @@ public class HeadHistoryController {
     //localhost:8080/department/query?id=1
     @GetMapping("/query")
     public HeadHistoryDTO queryById(@RequestParam("id") Long id) throws Exception {
-        //return departmentService.findById(id);
         System.out.println("Controller: " + id);
         return service.findById(id);
     }
 
     /*@DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        /*
-        try {
-            departmentService.delete(id);
-            return new ResponseEntity<>("Department removed!", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(">>" + e.getMessage(), HttpStatus.NOT_FOUND);
-        }
 
         service.delete(id);
         return new ResponseEntity<>("Head history removed!", HttpStatus.OK);

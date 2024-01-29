@@ -67,13 +67,6 @@ public class SubjectController {
     //obrisi
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        /*
-        try {
-            departmentService.delete(id);
-            return new ResponseEntity<>("Department removed!", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(">>" + e.getMessage(), HttpStatus.NOT_FOUND);
-        }*/
         
         subjectService.delete(id);
         return new ResponseEntity<>("Department removed!", HttpStatus.OK);

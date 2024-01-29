@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/scientific_field")
+@RequestMapping("/scientific-field")
 public class ScientificFieldController {
     private ScientificFieldService scientificFieldService;
 
@@ -43,20 +43,12 @@ public class ScientificFieldController {
     //localhost:8080/department/query?id=1
     @GetMapping("/query")
     public ScientificFieldDTO queryById(@RequestParam("id") Long id) throws Exception {
-        //return departmentService.findById(id);
         System.out.println("Controller: " + id);
         return scientificFieldService.findById(id);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        /*
-        try {
-            departmentService.delete(id);
-            return new ResponseEntity<>("Department removed!", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(">>" + e.getMessage(), HttpStatus.NOT_FOUND);
-        }*/
 
         scientificFieldService.delete(id);
         return new ResponseEntity<>("Scientific field removed!", HttpStatus.OK);

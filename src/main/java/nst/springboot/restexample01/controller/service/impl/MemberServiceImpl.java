@@ -41,8 +41,10 @@ public class MemberServiceImpl implements MemberService {
     private RoleRepository roleRepository;
     private RoleConverter roleConverter;
     private ATHConverter athConverter;
+    private ActiveHeadRepository activeHeadRepository;
+    private ActiveSecretaryRepository activeSecretaryRepository;
 
-    public MemberServiceImpl(MemberConverter memberConverter,ATHConverter athConverter,HeadHistoryConverter headHistoryConverter, SecretaryHistoryConverter secretaryHistoryConverter, MemberHeadSecConverter memberHeadSecConverter, MemberRepository memberRepository, DepartmentRepository departmentRepository, AcademicTitleRepository academicTitleRepository, AcademicTitleHistoryRepository academicTitleHistoryRepository, HeadHistoryRepository headHistoryRepository, SecretaryHistoryRepository secretaryHistoryRepository, RoleRepository roleRepository, RoleConverter roleConverter) {
+    public MemberServiceImpl(ActiveSecretaryRepository activeSecretaryRepository, ActiveHeadRepository activeHeadRepository, MemberConverter memberConverter,ATHConverter athConverter,HeadHistoryConverter headHistoryConverter, SecretaryHistoryConverter secretaryHistoryConverter, MemberHeadSecConverter memberHeadSecConverter, MemberRepository memberRepository, DepartmentRepository departmentRepository, AcademicTitleRepository academicTitleRepository, AcademicTitleHistoryRepository academicTitleHistoryRepository, HeadHistoryRepository headHistoryRepository, SecretaryHistoryRepository secretaryHistoryRepository, RoleRepository roleRepository, RoleConverter roleConverter) {
         this.memberConverter = memberConverter;
         this.memberHeadSecConverter = memberHeadSecConverter;
         this.memberRepository = memberRepository;
@@ -56,6 +58,8 @@ public class MemberServiceImpl implements MemberService {
         this.secretaryHistoryConverter = secretaryHistoryConverter;
         this.headHistoryConverter = headHistoryConverter;
         this.athConverter = athConverter;
+        this.activeHeadRepository = activeHeadRepository;
+        this.activeSecretaryRepository = activeSecretaryRepository;
     }
 
     @Override
@@ -76,7 +80,7 @@ public class MemberServiceImpl implements MemberService {
             memberDTO.setRoleDTO(roleConverter.toDto(member.getRole()));
         }else {
             memberDTO.setRoleDTO(new RoleDTO(3L,null));
-            if(member.getRole().getId().equals(2L) || member.getRole().getId().equals(3L)){
+            if(member.getRole().getId().equals(2L) || member.getRole().getId().equals(1L)){
                 regularRole(member.getId());
             }
         }
@@ -120,12 +124,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberDTO secRole(Long idM, DatesDTO datesDTO) throws Exception {
         Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
-        Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),2L);
-        if(memberSH.isPresent()){
+        Optional<ActiveSecretary> activeSecretary= activeSecretaryRepository.findByDepartmentId(mem.getDepartment().getId());
+        //Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),2L);
+        if(activeSecretary.isPresent()){
             throw  new Exception("The department already has a secretary member. Member with id: "+
-                    memberSH.get().getId()+
+                    activeSecretary.get().getMember().getId()+
                     " is active secretary for department with id: "+
-                    memberSH.get().getDepartment().getId()+ " !");
+                    activeSecretary.get().getDepartment().getId()+ " !");
         }
         if(datesDTO.getStartDate()==null || datesDTO.getEndDate()==null || datesDTO.getStartDate().isAfter(datesDTO.getEndDate()))
         {
@@ -136,19 +141,21 @@ public class MemberServiceImpl implements MemberService {
         }
         mem.setRole(new Role(2L,null));
         Member mH = memberRepository.save(mem);
-        secretaryHistoryRepository.save(new SecretaryHistory(null,datesDTO.getStartDate(),datesDTO.getEndDate(),mH,mH.getDepartment()));
+        SecretaryHistory sh = secretaryHistoryRepository.save(new SecretaryHistory(null,datesDTO.getStartDate(),datesDTO.getEndDate(),mH,mH.getDepartment()));
+        activeSecretaryRepository.save(new ActiveSecretary(null,sh,mH,mH.getDepartment()));
         return memberConverter.toDto(mH);
     }
 
     @Override
     public MemberDTO headRole(Long idM, DatesDTO datesDTO) throws Exception {
         Member mem = memberRepository.findById(idM).orElseThrow(() -> new Exception("Member doesn't exist!"));
-        Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),1L);
-        if(memberSH.isPresent()){
+        Optional<ActiveHead> activeHead = activeHeadRepository.findByDepartmentId(mem.getDepartment().getId());
+        //Optional<Member> memberSH = memberRepository.findByDepartmentIdAndRoleId(mem.getDepartment().getId(),1L);
+        if(activeHead.isPresent()){
             throw  new Exception("The department already has a head member. Member with id: "+
-                    memberSH.get().getId()+
+                    activeHead.get().getMember().getId()+
                     " is active head for department with id: "+
-                    memberSH.get().getDepartment().getId()+ " !");
+                    activeHead.get().getDepartment().getId()+ " !");
         }
         if(datesDTO.getStartDate()==null || datesDTO.getEndDate()==null || datesDTO.getStartDate().isAfter(datesDTO.getEndDate()))
         {
@@ -159,7 +166,8 @@ public class MemberServiceImpl implements MemberService {
         }
         mem.setRole(new Role(1L,null));
         Member mH = memberRepository.save(mem);
-        headHistoryRepository.save(new HeadHistory(null,datesDTO.getStartDate(),datesDTO.getEndDate(),mH,mH.getDepartment()));
+        HeadHistory hh = headHistoryRepository.save(new HeadHistory(null,datesDTO.getStartDate(),datesDTO.getEndDate(),mH,mH.getDepartment()));
+        activeHeadRepository.save(new ActiveHead(null,hh,mH,mH.getDepartment()));
         return memberConverter.toDto(mH);
     }
 
@@ -169,20 +177,23 @@ public class MemberServiceImpl implements MemberService {
         if(mem.getRole().getId().equals(1L)) {
             mem.setRole(new Role(3L, null));
             Member mH = memberRepository.save(mem);
-            List<HeadHistory> history = headHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByEndDateDesc(mem.getId(), mem.getDepartment().getId());
-            ;
-            if (!history.isEmpty()) {
-                history.get(0).setEndDate(LocalDate.now());
-                headHistoryRepository.save(history.get(0));
+            Optional<ActiveHead> activeHead = activeHeadRepository.findByMemberIdAndDepartmentId(mH.getId(),mH.getDepartment().getId());
+            if(activeHead.isPresent()){
+                HeadHistory hh = activeHead.get().getHeadHistory();
+                hh.setEndDate(LocalDate.now());
+                headHistoryRepository.save(hh);
+                activeHeadRepository.delete(activeHead.get());
             }
             return memberConverter.toDto(mH);
         }else if(mem.getRole().getId().equals(2L)) {
             mem.setRole(new Role(3L,null));
             Member mH = memberRepository.save(mem);
-            List<SecretaryHistory> history = secretaryHistoryRepository.findAllByMemberIdAndDepartmentIdOrderByEndDateDesc(mem.getId(),mem.getDepartment().getId());;
-            if(!history.isEmpty()) {
-                history.get(0).setEndDate(LocalDate.now());
-                secretaryHistoryRepository.save(history.get(0));
+            Optional<ActiveSecretary> activeSecretary = activeSecretaryRepository.findByMemberIdAndDepartmentId(mH.getId(),mH.getDepartment().getId());
+            if(activeSecretary.isPresent()){
+                SecretaryHistory sh = activeSecretary.get().getSecretaryHistory();
+                sh.setEndDate(LocalDate.now());
+                secretaryHistoryRepository.save(sh);
+                activeSecretaryRepository.delete(activeSecretary.get());
             }
             return memberConverter.toDto(mH);
         } else {

@@ -18,16 +18,16 @@ public class SubjectDto implements Serializable {
     private Long id;
     private String name;
     private int esbp;
-    private DepartmentDto departmentDto;
+    private DepartmentDto department;
 
     public SubjectDto() {
     }
 
-    public SubjectDto(Long id, String name, int esbp, DepartmentDto departmentDto) {
+    public SubjectDto(Long id, String name, int esbp, DepartmentDto department) {
         this.id = id;
         this.name = name;
         this.esbp = esbp;
-        this.departmentDto = departmentDto;
+        this.department = department;
     }
 
     public Long getId() {
@@ -55,11 +55,11 @@ public class SubjectDto implements Serializable {
     }
 
     public DepartmentDto getDepartmentDto() {
-        return departmentDto;
+        return department;
     }
 
-    public void setDepartmentDto(DepartmentDto departmentDto) {
-        this.departmentDto = departmentDto;
+    public void setDepartmentDto(DepartmentDto department) {
+        this.department = department;
     }
 
    

@@ -44,20 +44,12 @@ public class RoleController {
     //localhost:8080/department/query?id=1
     @GetMapping("/query")
     public RoleDTO queryById(@RequestParam("id") Long id) throws Exception {
-        //return departmentService.findById(id);
         System.out.println("Controller: " + id);
         return roleService.findById(id);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        /*
-        try {
-            departmentService.delete(id);
-            return new ResponseEntity<>("Department removed!", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(">>" + e.getMessage(), HttpStatus.NOT_FOUND);
-        }*/
 
         roleService.delete(id);
         return new ResponseEntity<>("Role removed!", HttpStatus.OK);

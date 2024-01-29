@@ -83,20 +83,12 @@ public class MemberController {
     //localhost:8080/department/query?id=1
     @GetMapping("/query")
     public MemberDTO queryById(@RequestParam("id") Long id) throws Exception {
-        //return departmentService.findById(id);
         System.out.println("Controller: " + id);
         return memberService.findById(id);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) throws Exception {
-        /*
-        try {
-            departmentService.delete(id);
-            return new ResponseEntity<>("Department removed!", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(">>" + e.getMessage(), HttpStatus.NOT_FOUND);
-        }*/
 
         memberService.delete(id);
         return new ResponseEntity<>("Member removed!", HttpStatus.OK);
