@@ -1,8 +1,11 @@
 package nst.springboot.restexample01.controller.service.impl;
 
 import nst.springboot.restexample01.controller.domain.ActiveHead;
+import nst.springboot.restexample01.controller.domain.Department;
+import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.domain.Role;
 import nst.springboot.restexample01.controller.repository.ActiveHeadRepository;
+import nst.springboot.restexample01.controller.repository.DepartmentRepository;
 import nst.springboot.restexample01.controller.service.ActiveHeadService;
 import nst.springboot.restexample01.converter.impl.ActiveHeadConverter;
 import nst.springboot.restexample01.dto.ActiveHeadDTO;
@@ -17,10 +20,12 @@ public class ActiveHeadServiceImpl implements ActiveHeadService {
 
     private ActiveHeadConverter activeHeadConverter;
     private ActiveHeadRepository activeHeadRepository;
+    private DepartmentRepository departmentRepository;
 
-    public ActiveHeadServiceImpl(ActiveHeadConverter activeHeadConverter, ActiveHeadRepository activeHeadRepository) {
+    public ActiveHeadServiceImpl(DepartmentRepository departmentRepository, ActiveHeadConverter activeHeadConverter, ActiveHeadRepository activeHeadRepository) {
         this.activeHeadConverter = activeHeadConverter;
         this.activeHeadRepository = activeHeadRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     @Override
@@ -64,5 +69,12 @@ public class ActiveHeadServiceImpl implements ActiveHeadService {
         } else {
             throw new Exception("Active head does not exist!");
         }
+    }
+
+    @Override
+    public ActiveHeadDTO findByDepartmentId(Long idD) throws Exception{
+        departmentRepository.findById(idD).orElseThrow(()->new Exception("Department doesn't exist"));
+        ActiveHead activeHead = activeHeadRepository.findByDepartmentId(idD).orElseThrow(()->new Exception("Department doesn't have head member!"));
+        return activeHeadConverter.toDto(activeHead);
     }
 }

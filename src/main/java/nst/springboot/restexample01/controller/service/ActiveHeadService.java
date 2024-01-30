@@ -11,5 +11,6 @@ public interface ActiveHeadService {
     void delete(Long id) throws Exception;
     void update(ActiveHeadDTO activeHeadDTO)throws Exception;
     ActiveHeadDTO findById(Long id)throws Exception;
+    ActiveHeadDTO findByDepartmentId(Long idD) throws Exception;
 
 }

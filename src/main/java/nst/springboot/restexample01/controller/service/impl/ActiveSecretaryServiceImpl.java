@@ -1,7 +1,10 @@
 package nst.springboot.restexample01.controller.service.impl;
 
+import nst.springboot.restexample01.controller.domain.ActiveHead;
 import nst.springboot.restexample01.controller.domain.ActiveSecretary;
+import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.repository.ActiveSecretaryRepository;
+import nst.springboot.restexample01.controller.repository.DepartmentRepository;
 import nst.springboot.restexample01.controller.service.ActiveSecretaryService;
 import nst.springboot.restexample01.converter.impl.ActiveSecretaryConverter;
 import nst.springboot.restexample01.dto.ActiveSecretaryDTO;
@@ -16,10 +19,12 @@ public class ActiveSecretaryServiceImpl implements ActiveSecretaryService {
 
     private ActiveSecretaryConverter activeSecretaryConverter;
     private ActiveSecretaryRepository activeSecretaryRepository;
+    private DepartmentRepository departmentRepository;
 
-    public ActiveSecretaryServiceImpl(ActiveSecretaryConverter activeSecretaryConverter, ActiveSecretaryRepository activeSecretaryRepository) {
+    public ActiveSecretaryServiceImpl(DepartmentRepository departmentRepository, ActiveSecretaryConverter activeSecretaryConverter, ActiveSecretaryRepository activeSecretaryRepository) {
         this.activeSecretaryConverter = activeSecretaryConverter;
         this.activeSecretaryRepository = activeSecretaryRepository;
+        this.departmentRepository = departmentRepository;
     }
 
 
@@ -63,6 +68,13 @@ public class ActiveSecretaryServiceImpl implements ActiveSecretaryService {
         } else {
             throw new Exception("Active secretary does not exist!");
         }
+    }
+
+    @Override
+    public ActiveSecretaryDTO findByDepartmentId(Long idD) throws Exception {
+        departmentRepository.findById(idD).orElseThrow(()->new Exception("Department doesn't exist"));
+        ActiveSecretary activeSecretary = activeSecretaryRepository.findByDepartmentId(idD).orElseThrow(()->new Exception("Department doesn't have secretary member!"));
+        return activeSecretaryConverter.toDto(activeSecretary);
     }
 }
 

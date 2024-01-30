@@ -89,6 +89,20 @@
         <sqlFile path="dml/init_ath.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="init-secretary-history" author="andrija">
+        <sqlFile path="dml/init-secretary-history.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 
+    <changeSet id="init-head-history" author="andrija">
+        <sqlFile path="dml/init-head-history.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="init-active-head" author="andrija">
+        <sqlFile path="dml/init-active-head.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="init-active-secretary" author="andrija">
+        <sqlFile path="dml/init-active-secretary.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 
 </databaseChangeLog>

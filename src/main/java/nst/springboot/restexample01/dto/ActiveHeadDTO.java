@@ -1,5 +1,6 @@
 package nst.springboot.restexample01.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import nst.springboot.restexample01.controller.domain.HeadHistory;
@@ -8,7 +9,9 @@ public class ActiveHeadDTO {
     Long id;
 
     HeadHistoryDTO headHistory;
+    @JsonIgnore
     MemberDTO memberDTO;
+    @JsonIgnore
     DepartmentDto departmentDto;
 
     public ActiveHeadDTO() {

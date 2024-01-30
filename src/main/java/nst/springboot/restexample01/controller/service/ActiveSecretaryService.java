@@ -12,5 +12,6 @@ public interface ActiveSecretaryService {
     void delete(Long id) throws Exception;
     void update(ActiveSecretaryDTO activeSecretaryDTO)throws Exception;
     ActiveSecretaryDTO findById(Long id)throws Exception;
+    ActiveSecretaryDTO findByDepartmentId(Long idD) throws Exception;
 
 }

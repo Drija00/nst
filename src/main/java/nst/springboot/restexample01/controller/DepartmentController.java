@@ -9,14 +9,8 @@ import java.util.List;
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.repository.SecretaryHistoryRepository;
-import nst.springboot.restexample01.controller.service.DepartmentService;
-import nst.springboot.restexample01.controller.service.HeadHistoryService;
-import nst.springboot.restexample01.controller.service.MemberService;
-import nst.springboot.restexample01.controller.service.SecretaryHistoryService;
-import nst.springboot.restexample01.dto.DepartmentDto;
-import nst.springboot.restexample01.dto.HeadHistoryDTO;
-import nst.springboot.restexample01.dto.MemberDTO;
-import nst.springboot.restexample01.dto.SecretaryHistoryDTO;
+import nst.springboot.restexample01.controller.service.*;
+import nst.springboot.restexample01.dto.*;
 import nst.springboot.restexample01.exception.DepartmentAlreadyExistException;
 import nst.springboot.restexample01.exception.MyErrorDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +28,14 @@ public class DepartmentController {
 
     private DepartmentService departmentService;
     private MemberService memberService;
-    private SecretaryHistoryService secretaryHistoryService;
-    private HeadHistoryService headHistoryService;
+    private ActiveSecretaryService activeSecretaryService;
+    private ActiveHeadService activeHeadService;
 
-    public DepartmentController(DepartmentService departmentService, MemberService memberService, SecretaryHistoryService secretaryHistoryService, HeadHistoryService headHistoryService) {
+    public DepartmentController(ActiveSecretaryService activeSecretaryService, ActiveHeadService activeHeadService ,DepartmentService departmentService, MemberService memberService) {
         this.departmentService = departmentService;
         this.memberService = memberService;
-        this.secretaryHistoryService = secretaryHistoryService;
-        this.headHistoryService = headHistoryService;
+        this.activeHeadService = activeHeadService;
+        this.activeSecretaryService = activeSecretaryService;
     }
 
     //dodaj novi department
@@ -94,12 +88,12 @@ public class DepartmentController {
         return memberService.getAllByDepartmentId(id);
     }
     @GetMapping("/{id}/head")
-    public HeadHistoryDTO findHeadHistories(@PathVariable("id") Long idDepartment) throws Exception {
-        return headHistoryService.getByMemberIdAndDepartmentId(idDepartment);
+    public ActiveHeadDTO findHeadHistories(@PathVariable("id") Long idDepartment) throws Exception {
+        return activeHeadService.findByDepartmentId(idDepartment);
     }
     @GetMapping("/{id}/secretary")
-    public SecretaryHistoryDTO findSecretaryHistories(@PathVariable("id") Long idDepartment) throws Exception {
-        return secretaryHistoryService.getByMemberIdAndDepartmentId(idDepartment);
+    public ActiveSecretaryDTO findSecretaryHistories(@PathVariable("id") Long idDepartment) throws Exception {
+        return activeSecretaryService.findByDepartmentId(idDepartment);
     }
 
     //pronadji na osnovu ID/a

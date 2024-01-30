@@ -1,10 +1,14 @@
 package nst.springboot.restexample01.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ActiveSecretaryDTO {
     Long id;
 
     SecretaryHistoryDTO secretaryHistory;
+    @JsonIgnore
     MemberDTO memberDTO;
+    @JsonIgnore
     DepartmentDto departmentDto;
 
     public ActiveSecretaryDTO() {
