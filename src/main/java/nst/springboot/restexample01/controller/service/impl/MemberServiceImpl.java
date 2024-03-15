@@ -233,8 +233,8 @@ public class MemberServiceImpl implements MemberService {
     public MemberHistoriesDTO findAllHistories(Long id) throws Exception {
         memberRepository.findById(id).orElseThrow(() -> new Exception("Member doesn't exist!"));
     List<ATHDto> athDtos = academicTitleHistoryRepository.findAllByMemberId(id)
-                .stream().map(entity -> athConverter.toDto(entity))
-                .toList();
+            .stream().map(entity -> athConverter.toDto(entity))
+            .toList();
     List<HeadHistoryDTO> headHistoryDTOS = headHistoryRepository.findAllByMemberId(id)
             .stream().map(entity -> headHistoryConverter.toDto(entity))
             .toList();
