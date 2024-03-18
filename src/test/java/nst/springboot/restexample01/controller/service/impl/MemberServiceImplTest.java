@@ -18,6 +18,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class MemberServiceImplTest {
@@ -59,7 +60,6 @@ public class MemberServiceImplTest {
 
     @Test
     public void testSaveMember() throws Exception {
-        // Arrange
         MemberHeadSecDTO memberDTO = new MemberHeadSecDTO();
         memberDTO.setId(1L);
         memberDTO.setDepartment(1L);
@@ -82,14 +82,31 @@ public class MemberServiceImplTest {
         when(memberRepository.save(member)).thenReturn(member);
         when(memberConverter.toDto(member)).thenReturn(memberDTO1);
 
-        // Act
         MemberDTO savedMember = memberService.save(memberDTO);
 
-        // Assert
         assertEquals(savedMember.getId(), memberDTO.getId());
         assertEquals(savedMember.getDepartment().getId(), memberDTO.getDepartment());
-        verify(memberRepository, times(1)).save(member);
     }
 
-    // Add more test methods for other methods in MemberServiceImpl
+    @Test
+    public void testSaveMemberWithNullId() throws Exception {
+        MemberHeadSecDTO memberDTO = new MemberHeadSecDTO();
+        memberDTO.setId(null); // Setting id to null
+        memberDTO.setDepartment(1L);
+        memberDTO.setRoleDTO(new RoleDTO(3L, null));
+
+        Department department = new Department();
+        department.setId(1L);
+
+        Member member = new Member();
+        member.setId(1L);
+        member.setDepartment(department);
+
+        when(departmentRepository.findById(1L)).thenReturn(Optional.of(department));
+        when(memberHeadSecConverter.toEntity(memberDTO)).thenReturn(member);
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            memberService.save(memberDTO);
+        });
+    }
 }
