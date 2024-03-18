@@ -1,9 +1,8 @@
-package nst.springboot.restexample01.controller.service.impl.test;
+package nst.springboot.restexample01.controller.service.impl;
 
 import nst.springboot.restexample01.controller.domain.Department;
 import nst.springboot.restexample01.controller.domain.Member;
 import nst.springboot.restexample01.controller.repository.*;
-import nst.springboot.restexample01.controller.service.impl.MemberServiceImpl;
 import nst.springboot.restexample01.converter.impl.MemberConverter;
 import nst.springboot.restexample01.converter.impl.MemberHeadSecConverter;
 import nst.springboot.restexample01.dto.DepartmentDto;
